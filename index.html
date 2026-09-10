@@ -237,7 +237,377 @@
 
     <!-- CONTEÚDO DAS TELAS -->
     <main class="flex-1 p-8">
-      <!-- TELAS -->
+      <section data-tela="catalogo-de-produtos" class="hidden">
+<style>
+.sidebar-scroll::-webkit-scrollbar{width:4px}
+.sidebar-scroll::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:4px}
+.sidebar-scroll::-webkit-scrollbar-track{background:transparent}
+.cat-chip{transition:all .2s ease}
+.cat-chip:hover{background:#2563EB;color:#fff;border-color:#2563EB}
+.cat-chip.active{background:#1E3A5F;color:#fff;border-color:#1E3A5F}
+.price-range{-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:#CBD5E1;outline:none}
+.price-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:#2563EB;cursor:pointer;box-shadow:0 2px 6px rgba(37,99,235,.3)}
+.price-range::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#2563EB;cursor:pointer;border:none;box-shadow:0 2px 6px rgba(37,99,235,.3)}
+.prod-card{transition:transform .25s ease,box-shadow .25s ease}
+.prod-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(30,58,95,.12)}
+.prod-img{transition:transform .4s ease}
+.prod-card:hover .prod-img{transform:scale(1.08)}
+.add-btn{transition:all .2s ease}
+.add-btn:hover{background:#1E3A5F;transform:scale(1.05)}
+.add-btn:active{transform:scale(.92)}
+.add-btn.in-cart{background:#10B981;color:#fff}
+.notif-dot{animation:pulse-dot 2s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.5}}
+.search-input:focus{box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.filter-overlay{transition:opacity .3s ease,visibility .3s ease}
+.mobile-filter-btn{display:none}
+@media(max-width:1023px){
+.mobile-filter-btn{display:flex}
+.sidebar-desktop{position:fixed;top:0;left:0;width:300px;height:100vh;z-index:50;transform:translateX(-100%);transition:transform .3s ease}
+.sidebar-desktop.open{transform:translateX(0)}
+.filter-overlay.open{opacity:1;visibility:visible}
+}
+.wish-btn{transition:all .2s ease}
+.wish-btn:hover{transform:scale(1.15)}
+.wish-btn.active svg{fill:#EF4444;stroke:#EF4444}
+.qty-ctrl{transition:all .15s ease}
+.qty-ctrl:active{transform:scale(.9)}
+.sort-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231E3A5F' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+</style>
+
+<div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+
+    <div class="flex flex-col lg:flex-row gap-6">
+
+        <aside id="catalogo-filtros-sidebar" class="sidebar-desktop lg:relative lg:transform-none lg:w-[260px] lg:flex-shrink-0">
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 lg:sticky lg:top-6 sidebar-scroll lg:max-h-[calc(100vh-48px)] lg:overflow-y-auto">
+                <div class="flex items-center justify-between mb-5">
+                    <h3 class="font-display font-semibold text-marca-900 text-lg">Filtros</h3>
+                    <button onclick="catalogo_de_produtos_limparFiltros()" class="text-xs text-marca-600 hover:text-marca-800 font-medium transition-colors">Limpar tudo</button>
+                </div>
+                <div class="mb-6">
+                    <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Categorias</h4>
+                    <div id="catalogo-lista-categorias" class="space-y-1.5"></div>
+                </div>
+                <div class="mb-6">
+                    <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Faixa de Preço</h4>
+                    <div class="px-1">
+                        <input type="range" id="catalogo-range-preco" min="0" max="2000" value="2000" step="10" class="price-range w-full" oninput="catalogo_de_produtos_atualizarPreco(this.value)">
+                        <div class="flex justify-between mt-2">
+                            <span class="text-xs text-slate-500">R$ 0</span>
+                            <span id="catalogo-preco-max-label" class="text-xs font-semibold text-marca-700">R$ 2.000</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Disponibilidade</h4>
+                    <label class="flex items-center gap-3 cursor-pointer group">
+                        <div class="relative">
+                            <input type="checkbox" id="catalogo-filtro-so-promocao" onchange="catalogo_de_produtos_aplicarFiltros()" class="sr-only peer">
+                            <div class="w-10 h-5 bg-slate-200 peer-checked:bg-marca-600 rounded-full transition-colors"></div>
+                            <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow peer-checked:translate-x-5 transition-transform"></div>
+                        </div>
+                        <span class="text-sm text-slate-600 group-hover:text-marca-700 transition-colors">Em promoção</span>
+                    </label>
+                </div>
+            </div>
+        </aside>
+
+        <div class="flex-1 min-w-0">
+            <div class="flex flex-col sm:flex-row gap-3 mb-5">
+                <div class="relative flex-1">
+                    <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke-width="2" stroke-linecap="round"/></svg>
+                    <input type="text" id="catalogo-busca" placeholder="Buscar produtos..." oninput="catalogo_de_produtos_aplicarFiltros()" class="search-input w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm text-slate-800 placeholder:text-slate-400 outline-none focus:border-marca-500 transition-all">
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="catalogo_de_produtos_toggleFiltros()" class="mobile-filter-btn items-center gap-2 px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-600 hover:border-marca-400 transition-colors lg:hidden">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+                        Filtros
+                    </button>
+                    <select onchange="catalogo_de_produtos_ordenar(this.value)" class="sort-select appearance-none pl-4 pr-10 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-600 outline-none focus:border-marca-500 cursor-pointer transition-colors">
+                        <option value="destaque">Destaque</option>
+                        <option value="menor-preco">Menor preço</option>
+                        <option value="maior-preco">Maior preço</option>
+                        <option value="nome-az">Nome A-Z</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="catalogo-contador" class="text-sm text-slate-500 mb-4"></div>
+
+            <div id="catalogo-grade-produtos" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+
+            <div id="catalogo-estado-vazio" class="hidden text-center py-20">
+                <div class="w-20 h-20 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center">
+                    <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                </div>
+                <p class="text-lg font-display font-semibold text-slate-700 mb-1">Nenhum produto encontrado</p>
+                <p class="text-sm text-slate-500 mb-4">Tente ajustar seus filtros ou buscar outro termo.</p>
+                <button onclick="catalogo_de_produtos_limparFiltros()" class="px-5 py-2.5 bg-marca-600 text-white text-sm font-medium rounded-lg hover:bg-marca-700 transition-colors active:scale-95">Limpar filtros</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="catalogo-overlay-filtros" class="filter-overlay fixed inset-0 bg-black/30 z-40 lg:hidden opacity-0 invisible" onclick="catalogo_de_produtos_toggleFiltros()"></div>
+
+<script>
+(function(){
+const P='#1E3A5F',A='#2563EB';
+const produtos=[
+{nome:'Camiseta Algodão Premium',cat:'Vestuário',preco:89.90,promo:true,desconto:20,desc:'Camiseta 100% algodão pima, corte regular, disponível em 8 cores. Tecido anti-odor e proteção UV.',foto:'Vestuário',cor:'#3B82F6',avaliacao:4.8,vendas:1240,sku:'VES-001',estoque:85},
+{nome:'Calça Jeans Slim Fit',cat:'Vestuário',preco:189.90,promo:false,desconto:0,desc:'Jeans com elastano, corte slim, lavagem média. Cintura alta com 5 bolsos.',foto:'Vestuário',cor:'#1E40AF',avaliacao:4.5,vendas:890,sku:'VES-002',estoque:42},
+{nome:'Jaqueta Corta-Vento',cat:'Vestuário',preco:299.90,promo:true,desconto:15,desc:'Jaqueta leve repelente à água, capuz ajustável. Compacta e portátil para viagens.',foto:'Vestuário',cor:'#475569',avaliacao:4.7,vendas:560,sku:'VES-003',estoque:30},
+{nome:'Vestido Midi Floral',cat:'Vestuário',preco:159.90,promo:false,desconto:0,desc:'Vestido midi com estampa floral exclusiva, tecido fluido, alças finas ajustáveis.',foto:'Vestuário',cor:'#EC4899',avaliacao:4.6,vendas:720,sku:'VES-004',estoque:55},
+{nome:'Fone Bluetooth Pro',cat:'Eletrônicos',preco:249.90,promo:true,desconto:30,desc:'Fone TWS com cancelamento de ruído ativo, 40h de bateria, Bluetooth 5.3 e resistência IPX5.',foto:'Eletrônicos',cor:'#1E293B',avaliacao:4.9,vendas:2100,sku:'ELE-001',estoque:120},
+{nome:'Smartwatch Sport',cat:'Eletrônicos',preco:599.90,promo:false,desconto:0,desc:'Relógio inteligente com GPS, monitor cardíaco, SpO2 e mais de 100 modos esportivos.',foto:'Eletrônicos',cor:'#0F172A',avaliacao:4.7,vendas:980,sku:'ELE-002',estoque:25},
+{nome:'Carregador Wireless 15W',cat:'Eletrônicos',preco:79.90,promo:true,desconto:25,desc:'Carregador por indução Qi, compatível com todos os smartphones modernos. Led indicador.',foto:'Eletrônicos',cor:'#334155',avaliacao:4.4,vendas:1560,sku:'ELE-003',estoque:200},
+{nome:'Caixa de Som Portátil',cat:'Eletrônicos',preco:199.90,promo:false,desconto:0,desc:'Alta-fidelidade estéreo 20W, à prova d\'água IPX7, 12h de reprodução. Conectividade Bluetooth e entrada AUX.',foto:'Eletrônicos',cor:'#2563EB',avaliacao:4.6,vendas:750,sku:'ELE-004',estoque:60},
+{nome:'Mochila Executiva',cat:'Acessórios',preco:149.90,promo:false,desconto:0,desc:'Mochila para notebook até 15.6", compartimento acolchoado, porta USB externa, tecido ripstop.',foto:'Acessórios',cor:'#1E3A5F',avaliacao:4.5,vendas:640,sku:'ACE-001',estoque:70},
+{nome:'Carteira Couro Legítimo',cat:'Acessórios',preco:119.90,promo:true,desconto:10,desc:'Carteira masculina em couro bovino legítimo, 12 divisórias, proteção RFID contra clonagem.',foto:'Acessórios',cor:'#78350F',avaliacao:4.7,vendas:430,sku:'ACE-002',estoque:90},
+{nome:'Óculos de Sol Polarizado',cat:'Acessórios',preco:179.90,promo:false,desconto:0,desc:'Lentes polarizadas UV400, armação em acetato italiano. Design atemporal unissex.',foto:'Acessórios',cor:'#713F12',avaliacao:4.8,vendas:510,sku:'ACE-003',estoque:35},
+{nome:'Relógio Clássico',cat:'Acessórios',preco:349.90,promo:true,desconto:20,desc:'Relógio analógico com pulseira de couro, vidro de safira, resistência 50m. Garantia 2 anos.',foto:'Acessórios',cor:'#422006',avaliacao:4.6,vendas:320,sku:'ACE-004',estoque:18},
+{nome:'Tênis Urban Runner',cat:'Calçados',preco:279.90,promo:true,desconto:25,desc:'Tênis casual com amortecimento de EVA, solado em borracha natural. Estilo urbano moderno.',foto:'Calçados',cor:'#F1F5F9',avaliacao:4.7,vendas:1100,sku:'CAL-001',estoque:65},
+{nome:'Bota Coturno',cat:'Calçados',preco:329.90,promo:false,desconto:0,desc:'Bota coturno em couro, solado tratorado, forro térmico. Perfeita para o inverno.',foto:'Calçados',cor:'#3F2C22',avaliacao:4.4,vendas:280,sku:'CAL-002',estoque:40},
+{nome:'Sandália Slide Luxo',cat:'Calçados',preco:99.90,promo:false,desconto:0,desc:'Sandália slide com palmilha acolchoada, tira em couro sintético macio. Conforto premium.',foto:'Calçados',cor:'#E2E8F0',avaliacao:4.3,vendas:890,sku:'CAL-003',estoque:110},
+];
+
+const cats=['Todos','Eletrônicos','Vestuário','Acessórios','Calçados'];
+let carrinho=[];
+let favoritos=new Set();
+let catSel='Todos';
+let busca='';
+let maxPreco=2000;
+let soPromo=false;
+let ordem='destaque';
+
+function catalogo_de_produtos_renderizarCategorias(){
+const el=document.getElementById('catalogo-lista-categorias');
+if(!el)return;
+el.innerHTML=cats.map(c=>{
+const cnt=c==='Todos'?produtos.length:produtos.filter(p=>p.cat===c).length;
+const ativo=catSel===c?'active':'';
+return`<button onclick="catalogo_de_produtos_selecionarCategoria('${c}')" class="cat-chip w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium border ${ativo} border-slate-200 text-slate-600 hover:border-marca-400 hover:text-marca-700 text-left"><span>${c}</span><span class="text-xs opacity-70">${cnt}</span></button>`;
+}).join('');
+}
+
+function catalogo_de_produtos_selecionarCategoria(c){
+catSel=c;
+catalogo_de_produtos_renderizarCategorias();
+catalogo_de_produtos_aplicarFiltros();
+}
+
+function catalogo_de_produtos_atualizarPreco(v){
+maxPreco=+v;
+const el=document.getElementById('catalogo-preco-max-label');
+if(el)el.textContent='R$ '+(+v).toLocaleString('pt-BR');
+catalogo_de_produtos_aplicarFiltros();
+}
+
+function catalogo_de_produtos_aplicarFiltros(){
+busca=document.getElementById('catalogo-busca')?.value?.toLowerCase()||'';
+soPromo=document.getElementById('catalogo-filtro-so-promocao')?.checked||false;
+let res=produtos.filter(p=>{
+if(catSel!=='Todos'&&p.cat!==catSel)return false;
+if(p.preco>maxPreco)return false;
+if(soPromo&&!p.promo)return false;
+if(busca){
+const s=p.nome+' '+p.cat+' '+p.desc;
+if(!s.toLowerCase().includes(busca))return false;
+}
+return true;
+});
+res=catalogo_de_produtos_ordenarLista(res);
+catalogo_de_produtos_renderizar(res);
+}
+
+function catalogo_de_produtos_ordenarLista(lista){
+switch(ordem){
+case'menor-preco':return[...lista].sort((a,b)=>a.preco-b.preco);
+case'maior-preco':return[...lista].sort((a,b)=>b.preco-a.preco);
+case'nome-az':return[...lista].sort((a,b)=>a.nome.localeCompare(b.nome));
+default:return lista;
+}
+}
+
+function catalogo_de_produtos_ordenar(v){ordem=v;catalogo_de_produtos_aplicarFiltros();}
+
+function catalogo_de_produtos_limparFiltros(){
+catSel='Todos';busca='';maxPreco=2000;soPromo=false;ordem='destaque';
+const b=document.getElementById('catalogo-busca');if(b)b.value='';
+const r=document.getElementById('catalogo-range-preco');if(r)r.value=2000;
+const pm=document.getElementById('catalogo-preco-max-label');if(pm)pm.textContent='R$ 2.000';
+const ch=document.getElementById('catalogo-filtro-so-promocao');if(ch)ch.checked=false;
+const so=document.querySelector('.sort-select');if(so)so.value='destaque';
+catalogo_de_produtos_renderizarCategorias();
+catalogo_de_produtos_aplicarFiltros();
+}
+
+function catalogo_de_produtos_formatarPreco(v){
+const preco=v.toLocaleString('pt-BR',{minimumFractionDigits:2});
+if(v>=1000)return'<span class="text-lg font-bold text-marca-900">R$ '+preco+'</span>';
+return'<span class="text-lg font-bold text-marca-900">R$ '+preco+'</span>';
+}
+
+function catalogo_de_produtos_renderarPrecoPromocional(p){
+if(!p.promo)return catalogo_de_produtos_formatarPreco(p.preco);
+const promo=(p.preco*(1-p.desconto/100)).toLocaleString('pt-BR',{minimumFractionDigits:2});
+return catalogo_de_produtos_formatarPreco(p.preco*(1-p.desconto/100))+'<span class="text-sm text-slate-400 line-through ml-2">R$ '+p.preco.toLocaleString('pt-BR',{minimumFractionDigits:2})+'</span><span class="ml-2 px-2 py-0.5 bg-red-100 text-red-700 text-xs font-bold rounded-full">-${p.desconto}%</span>';
+}
+
+function catalogo_de_produtos_estrelas(r){
+let s='';
+for(let i=1;i<=5;i++){
+if(i<=Math.floor(r))s+='<svg class="w-3.5 h-3.5 text-amber-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>';
+else if(i-r<1&&i-r>0)s+='<svg class="w-3.5 h-3.5 text-amber-400" viewBox="0 0 20 20"><defs><linearGradient id="half"><stop offset="50%" stop-color="currentColor"/><stop offset="50%" stop-color="#D1D5DB"/></linearGradient></defs><path fill="url(#half)" stroke="currentColor" stroke-width=".5" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>';
+else s+='<svg class="w-3.5 h-3.5 text-slate-300" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>';
+}
+return s+'<span class="text-xs text-slate-500 ml-1">${r}</span>';
+}
+
+function catalogo_de_produtos_iconeCategoria(cat){
+const icons={
+'Eletrônicos':'<rect x="2" y="3" width="20" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+'Vestuário':'<path d="M12 2L8 6H3v2l2 1v11h3v-5h8v5h3v-11l2-1V6h-5L12 2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>',
+'Acessórios':'<circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+'Calçados':'<path d="M3 20h15l2-5v-5c0-1.1-.9-2-2-2h-1c-.5-2-2.5-4-5-4S4 6.9 4 9H3c-1.1 0-2 .9-2 2v5l2 5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 12h4v4H7z" fill="none" stroke="currentColor" stroke-width="1.5"/>'
+};
+return icons[cat]||icons['Acessórios'];
+}
+
+function catalogo_de_produtos_renderizar(lista){
+const grade=document.getElementById('catalogo-grade-produtos');
+const vazio=document.getElementById('catalogo-estado-vazio');
+const cont=document.getElementById('catalogo-contador');
+if(!grade)return;
+if(lista.length===0){
+grade.innerHTML='';grade.classList.add('hidden');
+vazio.classList.remove('hidden');
+if(cont)cont.textContent='0 produtos';
+return;
+}
+grade.classList.remove('hidden');vazio.classList.add('hidden');
+if(cont)cont.textContent=`${lista.length} produto${lista.length>1?'s':''} encontrado${lista.length>1?'s':''}`;
+
+const iniciais=n=>n.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+
+grade.innerHTML=lista.map((p,i)=>{
+const noCarrinho=carrinho.find(c=>c.sku===p.sku);
+const fav=favoritos.has(p.sku);
+const promPrice=p.promo?(p.preco*(1-p.desconto/100)):null;
+const initials=iniciais(p.nome);
+return`
+<div class="prod-card card bg-white rounded-2xl overflow-hidden border border-slate-200/80 cursor-pointer" onclick="catalogo_de_produtos_abrirDetalhe('${p.sku}')" style="animation:fadeInUp .4s ease ${i*0.05}s both">
+    <div class="relative h-48 overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50">
+        <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-20 h-20 rounded-full flex items-center justify-center" style="background:${p.cor}18">
+                <span class="font-display font-bold text-xl" style="color:${p.cor}">${initials}</span>
+            </div>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
+        ${p.promo?`<div class="absolute top-3 left-3 px-2.5 py-1 bg-red-500 text-white text-xs font-bold rounded-lg shadow-lg">-${p.desconto}%</div>`:''}
+        <div class="absolute top-3 right-3 flex flex-col gap-2">
+            <button onclick="event.stopPropagation();catalogo_de_produtos_toggleFav('${p.sku}',this)" class="wish-btn w-9 h-9 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-md ${fav?'active':''}">
+                <svg class="w-4 h-4 ${fav?'text-red-500':'text-slate-400'}" fill="${fav?'currentColor':'none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            </button>
+        </div>
+        <div class="absolute bottom-3 left-3 flex items-center gap-1.5">
+            <span class="px-2 py-1 bg-white/90 backdrop-blur text-xs font-semibold text-slate-600 rounded-md">${catalogo_de_produtos_iconeCategoria(p.cat)}</span>
+        </div>
+    </div>
+    <div class="p-4">
+        <p class="text-xs text-marca-600 font-medium uppercase tracking-wider mb-1">${p.cat}</p>
+        <h3 class="font-display font-semibold text-slate-800 text-sm mb-1.5 leading-tight line-clamp-2">${p.nome}</h3>
+        <div class="flex items-center gap-1 mb-3">${catalogo_de_produtos_estrelas(p.avaliacao)}</div>
+        <div class="flex items-center justify-between">
+            <div class="flex-1 min-w-0">${catalogo_de_produtos_renderarPrecoPromocional(p)}</div>
+        </div>
+        <button onclick="event.stopPropagation();catalogo_de_produtos_addCarrinho('${p.sku}')" class="add-btn mt-3 w-full py-2.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 ${noCarrinho?'in-cart':'bg-marca-600 text-white hover:bg-marca-700'}">
+            ${noCarrinho?`<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> No carrinho`:`<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg> Adicionar`}
+        </button>
+    </div>
+</div>`;
+}).join('');
+}
+
+function catalogo_de_produtos_abrirDetalhe(sku){
+const p=produtos.find(x=>x.sku===sku);
+if(!p)return;
+const promPrice=p.promo?(p.preco*(1-p.desconto/100)):null;
+const noCarrinho=carrinho.find(c=>c.sku===p.sku);
+const initials=p.nome.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+abrirModal(`
+<div class="flex flex-col md:flex-row gap-6">
+    <div class="w-full md:w-1/2">
+        <div class="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 flex items-center justify-center relative">
+            <div class="w-32 h-32 rounded-full flex items-center justify-center" style="background:${p.cor}15">
+                <span class="font-display font-bold text-4xl" style="color:${p.cor}">${initials}</span>
+            </div>
+            ${p.promo?`<div class="absolute top-4 left-4 px-3 py-1.5 bg-red-500 text-white text-sm font-bold rounded-lg">-${p.desconto}% OFF</div>`:''}
+        </div>
+    </div>
+    <div class="w-full md:w-1/2">
+        <span class="inline-block px-3 py-1 bg-marca-50 text-marca-700 text-xs font-semibold rounded-lg uppercase tracking-wider mb-3">${p.cat}</span>
+        <h2 class="font-display font-bold text-xl text-slate-900 mb-2">${p.nome}</h2>
+        <div class="flex items-center gap-2 mb-4">${catalogo_de_produtos_estrelas(p.avaliacao)}<span class="text-xs text-slate-500">(${p.vendas.toLocaleString('pt-BR')} vendas)</span></div>
+        <div class="mb-4">
+            ${promPrice?`<span class="text-2xl font-bold text-marca-900">R$ ${promPrice}</span><span class="text-base text-slate-400 line-through ml-2">R$ ${p.preco.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span>`:`<span class="text-2xl font-bold text-marca-900">R$ ${p.preco.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span>`}
+        </div>
+        <p class="text-sm text-slate-600 leading-relaxed mb-5">${p.desc}</p>
+        <div class="grid grid-cols-3 gap-3 mb-5">
+            <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">SKU</p><p class="text-sm font-semibold text-slate-700">${p.sku}</p></div>
+            <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">Estoque</p><p class="text-sm font-semibold ${p.estoque<30?'text-amber-600':'text-slate-700'}">${p.estoque} un.</p></div>
+            <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">Avaliação</p><p class="text-sm font-semibold text-slate-700">${p.avaliacao}/5</p></div>
+        </div>
+        <div class="flex gap-3">
+            <button onclick="catalogo_de_produtos_addCarrinho('${p.sku}');fecharModal();" class="flex-1 py-3 bg-marca-600 text-white font-semibold rounded-xl hover:bg-marca-700 transition-colors active:scale-95 text-sm">${noCarrinho?'Adicionar mais':'Adicionar ao carrinho'}</button>
+            <button onclick="fecharModal();mostrarTela('carrinho-e-checkout')" class="px-5 py-3 border-2 border-marca-600 text-marca-600 font-semibold rounded-xl hover:bg-marca-50 transition-colors active:scale-95 text-sm">Ver carrinho</button>
+        </div>
+    </div>
+</div>`,p.nome);
+}
+
+function catalogo_de_produtos_addCarrinho(sku){
+const p=produtos.find(x=>x.sku===sku);
+if(!p)return;
+const ex=carrinho.find(c=>c.sku===sku);
+if(ex){ex.qty++;}else{carrinho.push({sku:p.sku,nome:p.nome,preco:p.preco,qty:1,foto:p.foto,cor:p.cor,initials:p.nome.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase()});}
+catalogo_de_produtos_atualizarBadge();
+catalogo_de_produtos_aplicarFiltros();
+toast(`${p.nome} adicionado ao carrinho`,'ok');
+}
+
+function catalogo_de_produtos_toggleFav(sku,btn){
+if(favoritos.has(sku)){favoritos.delete(sku);toast('Removido dos favoritos','info');}else{favoritos.add(sku);toast('Adicionado aos favoritos','ok');}
+catalogo_de_produtos_aplicarFiltros();
+}
+
+function catalogo_de_produtos_atualizarBadge(){
+const total=carrinho.reduce((s,c)=>s+c.qty,0);
+document.querySelectorAll('.cart-badge').forEach(el=>{
+el.textContent=total;
+el.style.display=total>0?'flex':'none';
+});
+if(total===0)toast('Carrinho vazio','info');
+}
+
+function catalogo_de_produtos_toggleFiltros(){
+const s=document.getElementById('catalogo-filtros-sidebar');
+const o=document.getElementById('catalogo-overlay-filtros');
+if(!s)return;
+const isOpen=s.classList.contains('open');
+if(isOpen){s.classList.remove('open');if(o){o.classList.remove('open');}}else{s.classList.add('open');if(o){o.classList.add('open');}}
+}
+
+catalogo_de_produtos_renderizarCategorias();
+catalogo_de_produtos_aplicarFiltros();
+
+window._catalogo_refresh=function(){catalogo_de_produtos_aplicarFiltros();};
+})();
+</script>
+</section>
+
+    <!-- TELAS -->
     </main>
 
     <!-- RODAPÉ DA ÁREA -->
