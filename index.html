@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoVenda — Automação Inteligente para E-commerce</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            marca: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#2563EB',
+              600: '#1d4ed8',
+              700: '#1e40af',
+              800: '#1E3A5F',
+              900: '#172e50',
+              950: '#0f1f38',
+            },
+          },
+          fontFamily: {
+            display: ['Outfit', 'system-ui', 'sans-serif'],
+            body: ['DM Sans', 'system-ui', 'sans-serif'],
+          },
+          boxShadow: {
+            'card': '0 1px 3px rgba(30,58,95,0.06), 0 1px 2px rgba(30,58,95,0.04)',
+            'card-hover': '0 10px 25px rgba(30,58,95,0.10), 0 4px 10px rgba(30,58,95,0.06)',
+            'sidebar': '2px 0 12px rgba(30,58,95,0.06)',
+            'up': '0 -4px 20px rgba(30,58,95,0.12)',
+            'toast': '0 8px 30px rgba(0,0,0,0.18)',
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    body { font-family: 'DM Sans', system-ui, sans-serif; }
+    h1, h2, h3, h4, h5, h6, .font-display { font-family: 'Outfit', system-ui, sans-serif; }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    *:focus-visible {
+      outline: 2px solid #2563EB;
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    [data-tela]:not(.hidden) {
+      animation: fadeSlideIn 0.3s ease-out forwards;
+    }
+
+    [data-nav].ativo {
+      background: rgba(255,255,255,0.12);
+      color: #ffffff;
+      font-weight: 600;
+      border-right: 3px solid #2563EB;
+    }
+    [data-nav] {
+      border-right: 3px solid transparent;
+      transition: all 0.15s ease;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 20px;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: #2563EB; color: #fff; }
+    .btn-primary:hover { background: #1d4ed8; box-shadow: 0 4px 12px rgba(37,99,235,0.35); }
+    .btn-secondary { background: #F8FAFC; color: #1E3A5F; border: 1px solid #e2e8f0; }
+    .btn-secondary:hover { background: #f1f5f9; border-color: #cbd5e1; }
+    .btn-ghost { background: transparent; color: #2563EB; }
+    .btn-ghost:hover { background: rgba(37,99,235,0.08); }
+    .btn-danger { background: #EF4444; color: #fff; }
+    .btn-danger:hover { background: #DC2626; box-shadow: 0 4px 12px rgba(239,68,68,0.35); }
+    .btn-sm { padding: 6px 14px; font-size: 0.8rem; border-radius: 6px; }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(30,58,95,0.06), 0 1px 2px rgba(30,58,95,0.04);
+      border: 1px solid #e2e8f0;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .card:hover {
+      box-shadow: 0 10px 25px rgba(30,58,95,0.10), 0 4px 10px rgba(30,58,95,0.06);
+      transform: translateY(-1px);
+    }
+    .card-interactive { cursor: pointer; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: 9999px;
+      letter-spacing: 0.01em;
+    }
+    .badge-primary { background: #dbeafe; color: #1d4ed8; }
+    .badge-success { background: #d1fae5; color: #065f46; }
+    .badge-warning { background: #fef3c7; color: #92400e; }
+    .badge-danger { background: #fee2e2; color: #991b1b; }
+    .badge-neutral { background: #f1f5f9; color: #475569; }
+
+    .avatar-iniciais {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-family: 'Outfit', system-ui, sans-serif;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body class="bg-marca-50 font-body text-marca-800 antialiased">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside id="sidebar" class="fixed top-0 left-0 z-40 h-screen w-[260px] bg-marca-800 text-white flex flex-col shadow-sidebar transition-transform duration-200">
+    <div class="px-6 pt-7 pb-5 flex items-center gap-3">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" class="flex-shrink-0">
+        <rect width="36" height="36" rx="10" fill="#2563EB"/>
+        <path d="M10 12h6v6h-6zM20 12h6v6h-6zM10 20h6v6h-6zM20 20h6v6h-6z" fill="white" opacity="0.9"/>
+      </svg>
+      <span class="font-display font-bold text-xl tracking-tight">AutoVenda</span>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto px-3 py-2 space-y-0.5">
+      <div class="px-3 py-2 text-[0.65rem] font-bold uppercase tracking-widest text-white/40">Comercial</div>
+
+      <button data-nav="catalogo-de-produtos" onclick="mostrarTela('catalogo-de-produtos')" class="ativo w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/75 hover:bg-white/10 hover:text-white transition-colors text-left">
+        <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/></svg>
+        Catálogo de Produtos
+      </button>
+      <button data-nav="detalhe-do-produto" onclick="mostrarTela('detalhe-do-produto')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/75 hover:bg-white/10 hover:text-white transition-colors text-left">
+        <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+        Detalhe do Produto
+      </button>
+      <button data-nav="carrinho-e-checkout" onclick="mostrarTela('carrinho-e-checkout')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/75 hover:bg-white/10 hover:text-white transition-colors text-left">
+        <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>
+        Carrinho e Checkout
+      </button>
+
+      <div class="px-3 pt-4 pb-2 text-[0.65rem] font-bold uppercase tracking-widest text-white/40">Automação & IA</div>
+
+      <button data-nav="chatbot-inteligente" onclick="mostrarTela('chatbot-inteligente')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/75 hover:bg-white/10 hover:text-white transition-colors text-left">
+        <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 013 21V12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"/></svg>
+        Chatbot Inteligente
+      </button>
+
+      <div class="px-3 pt-4 pb-2 text-[0.65rem] font-bold uppercase tracking-widest text-white/40">Painel</div>
+
+      <button data-nav="acompanhar-pedidos" onclick="mostrarTela('acompanhar-pedidos')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/75 hover:bg-white/10 hover:text-white transition-colors text-left">
+        <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25H6A2.25 2.25 0 003.75 6v8.25A2.25 2.25 0 006 16.5h.75m3 3h.375a.375.375 0 00.375-.375v-1.125a.375.375 0 00-.375-.375H13.5m3 3h.375a.375.375 0 00.375-.375v-1.125a.375.375 0 00-.375-.375H13.5m-3-3v-.375c0-.414.336-.75.75-.75h5.25c.414 0 .75.336.75.75v.375m-3 0v-.375c0-.414.336-.75.75-.75h5.25c.414 0 .75.336.75.75v.375m-3 0h.375m3 0h.375a.375.375 0 00.375-.375v-1.125a.375.375 0 00-.375-.375H13.5"/></svg>
+        Acompanhar Pedidos
+      </button>
+      <button data-nav="dashboard-de-vendas" onclick="mostrarTela('dashboard-de-vendas')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/75 hover:bg-white/10 hover:text-white transition-colors text-left">
+        <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg>
+        Dashboard de Vendas
+      </button>
+      <button data-nav="gestao-de-clientes" onclick="mostrarTela('gestao-de-clientes')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/75 hover:bg-white/10 hover:text-white transition-colors text-left">
+        <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-3.83-2.944M15 19.128v.003M15 19.128a48.704 48.704 0 01-8.445-3.06m0 0a9.349 9.349 0 01-3.426-3.426M9.555 15.964a48.674 48.674 0 01-3.426-3.426m0 0a9.349 9.349 0 01-3.426-3.426m3.426 3.426H15m0 0a48.667 48.667 0 008.445-3.06m0 0a9.349 9.349 0 003.426-3.426M20.25 9.375a9.349 9.349 0 00-3.426-3.426M15 9.375a48.667 48.667 0 01-8.445 3.06m0 0a9.349 9.349 0 01-3.426 3.426M3.75 9.375a9.349 9.349 0 013.426 3.426M12 12.75a.75.75 0 100-1.5.75.75 0 000 1.5z"/></svg>
+        Gestão de Clientes
+      </button>
+    </nav>
+
+    <div class="p-4 border-t border-white/10">
+      <div class="flex items-center gap-3">
+        <div class="avatar-iniciais w-9 h-9 bg-marca-500 text-xs">RC</div>
+        <div class="min-w-0">
+          <p class="text-sm font-semibold text-white truncate">Rafael Costa</p>
+          <p class="text-xs text-white/50 truncate">Administrador</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== ÁREA PRINCIPAL ===== -->
+  <div class="ml-[260px] min-h-screen flex flex-col">
+
+    <!-- BARRA SUPERIOR -->
+    <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-slate-200/80 shadow-up">
+      <div class="flex items-center justify-between px-8 h-16">
+        <div class="flex-1 max-w-xl">
+          <div class="relative">
+            <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+            <input type="text" placeholder="Buscar clientes, pedidos, produtos…" class="w-full pl-10 pr-4 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-marca-500/30 focus:border-marca-500 transition-all placeholder:text-slate-400">
+          </div>
+        </div>
+        <div class="flex items-center gap-2 ml-6">
+          <button onclick="toast('Nenhuma notificação nova','info')" class="relative p-2.5 rounded-lg hover:bg-slate-100 transition-colors" aria-label="Notificações">
+            <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
+            <span id="notif-badge" class="absolute -top-0.5 -right-0.5 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">3</span>
+          </button>
+          <button class="p-2.5 rounded-lg hover:bg-slate-100 transition-colors" aria-label="Configurações">
+            <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003 1.008c-.253.24-.451.526-.597.809l-.368 1.15c-.104.333-.397.57-.75.573-.354.003-.646-.228-.75-.573l-.368-1.15a3.002 3.002 0 00-.597-.809l-1.003-1.008a1.125 1.125 0 01-.26-1.431l1.296-2.247a1.125 1.125 0 011.37-.49l1.217.456c.355.133.75.072 1.075-.124a2.244 2.244 0 00.22-.127c.332-.184.582-.496.645-.87l.213-1.281c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003 1.008c-.253.24-.451.526-.597.809l-.368 1.15c-.104.333-.397.57-.75.573-.354.003-.646-.228-.75-.573l-.368-1.15a3.002 3.002 0 00-.597-.809l-1.003-1.008a1.125 1.125 0 01-.26-1.431l1.296-2.247a1.125 1.125 0 011.37-.49l1.217.456c.355.133.75.072 1.075-.124.324-.196.58-.496.645-.87l.213-1.281z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </button>
+          <div class="w-px h-6 bg-slate-200 mx-1"></div>
+          <button class="flex items-center gap-2.5 p-1.5 pr-3 rounded-lg hover:bg-slate-100 transition-colors">
+            <div class="avatar-iniciais w-8 h-8 bg-marca-500 text-[11px]">RC</div>
+            <span class="text-sm font-medium text-slate-700 hidden lg:inline">Rafael Costa</span>
+            <svg class="w-3.5 h-3.5 text-slate-400 hidden lg:inline" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTEÚDO DAS TELAS -->
+    <main class="flex-1 p-8">
+      <!-- TELAS -->
+    </main>
+
+    <!-- RODAPÉ DA ÁREA -->
+    <footer class="px-8 py-3 border-t border-slate-200/60 bg-white/60">
+      <p class="text-xs text-slate-400 text-center">AutoVenda v1.0 &mdash; Protótipo &copy; BlueCircuit</p>
+    </footer>
+  </div>
+
+  <!-- ===== TOASTS ===== -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-[60] flex flex-col gap-3 pointer-events-none"></div>
+
+  <!-- ===== MODAL GENÉRICO ===== -->
+  <div id="modal" class="hidden fixed inset-0 z-50 items-center justify-center p-4">
+    <div id="modal-backdrop" class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+    <div class="relative bg-white rounded-2xl shadow-toast w-full max-w-lg max-h-[85vh] flex flex-col overflow-hidden">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+        <h3 id="modal-title" class="font-display font-bold text-lg text-marca-800"></h3>
+        <button onclick="fecharModal()" class="p-1.5 rounded-lg hover:bg-slate-100 transition-colors" aria-label="Fechar modal">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div id="modal-body" class="p-6 overflow-y-auto"></div>
+    </div>
+  </div>
+
+  <script>
+    /* ===== ROTEADOR ===== */
+    function mostrarTela(id) {
+      document.querySelectorAll('[data-tela]').forEach(function (s) {
+        s.classList.toggle('hidden', s.dataset.tela !== id);
+      });
+      document.querySelectorAll('[data-nav]').forEach(function (b) {
+        b.classList.toggle('ativo', b.dataset.nav === id);
+      });
+      window.scrollTo({ top: 0 });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      mostrarTela('catalogo-de-produtos');
+    });
+
+    /* ===== TOASTS ===== */
+    var toastTimer = null;
+    function toast(mensagem, tipo) {
+      tipo = tipo || 'info';
+      var container = document.getElementById('toast-container');
+      var cores = { ok: '#10B981', erro: '#EF4444', info: '#2563EB' };
+      var icones = {
+        ok: '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>',
+        erro: '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>',
+        info: '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>'
+      };
+      var el = document.createElement('div');
+      el.className = 'pointer-events-auto flex items-center gap-3 bg-white rounded-xl px-5 py-3.5 shadow-toast border border-slate-100 min-w-[280px] max-w-sm';
+      el.style.cssText = 'animation: fadeSlideIn 0.25s ease-out forwards;';
+      el.innerHTML = '<span class="flex-shrink-0" style="color:' + cores[tipo] + '">' + icones[tipo] + '</span>' +
+        '<span class="text-sm font-medium text-marca-800">' + mensagem + '</span>';
+      container.appendChild(el);
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () {
+        el.style.opacity = '0';
+        el.style.transform = 'translateX(20px)';
+        el.style.transition = 'all 0.3s ease';
+        setTimeout(function () { el.remove(); }, 300);
+      }, 3000);
+    }
+
+    /* ===== MODAL ===== */
+    function abrirModal(html, titulo) {
+      document.getElementById('modal-title').textContent = titulo || '';
+      document.getElementById('modal-body').innerHTML = html;
+      document.getElementById('modal').classList.remove('hidden');
+      document.getElementById('modal').classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+    function fecharModal() {
+      document.getElementById('modal').classList.add('hidden');
+      document.getElementById('modal').classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+    document.getElementById('modal').addEventListener('click', function (e) {
+      if (e.target === this) fecharModal();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') fecharModal();
+    });
+
+    /* ===== UTILITÁRIOS ===== */
+    function brl(valor) {
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
+    }
+    function dataBR(iso) {
+      if (!iso) return '—';
+      var d = new Date(iso + 'T00:00:00');
+      return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+    function avatarIniciais(nome, cor) {
+      var iniciais = nome.split(' ').map(function (n) { return n[0]; }).join('').toUpperCase().slice(0, 2);
+      var cores = ['bg-blue-600', 'bg-emerald-600', 'bg-amber-600', 'bg-purple-600', 'bg-rose-600', 'bg-cyan-600', 'bg-indigo-600'];
+      if (!cor) cor = cores[Math.floor(Math.random() * cores.length)];
+      return '<div class="avatar-iniciais w-10 h-10 text-xs ' + cor + '">' + iniciais + '</div>';
+    }
+    function statusBadge(status) {
+      var m = {
+        'pendente': '<span class="badge badge-warning">Pendente</span>',
+        'confirmado': '<span class="badge badge-primary">Confirmado</span>',
+        'enviado': '<span class="badge badge-primary">Enviado</span>',
+        'entregue': '<span class="badge badge-success">Entregue</span>',
+        'cancelado': '<span class="badge badge-danger">Cancelado</span>',
+        'processando': '<span class="badge badge-neutral">Processando</span>',
+        'aprovado': '<span class="badge badge-success">Aprovado</span>',
+        'rejeitado': '<span class="badge badge-danger">Rejeitado</span>',
+        'ativo': '<span class="badge badge-success">Ativo</span>',
+        'inativo': '<span class="badge badge-neutral">Inativo</span>',
+      };
+      return m[status] || '<span class="badge badge-neutral">' + status + '</span>';
+    }
+  </script>
+</body>
+</html>
