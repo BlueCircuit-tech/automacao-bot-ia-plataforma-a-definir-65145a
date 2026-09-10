@@ -1279,6 +1279,440 @@ window._catalogo_refresh=function(){catalogo_de_produtos_aplicarFiltros();};
       </script>
     </section>
 
+    <section data-tela="chatbot-inteligente" class="hidden">
+        <div class="flex h-[calc(100vh-4rem)] fade-in">
+            <!-- Sidebar de Conversas -->
+            <aside class="w-80 bg-white border-r border-gray-200 flex flex-col shrink-0">
+                <div class="p-4 border-b border-gray-200">
+                    <button onclick="chatbot_inteligente_novaConversa()" class="w-full btn-primary flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-medium">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        Nova Conversa
+                    </button>
+                </div>
+                <div class="p-3">
+                    <div class="relative">
+                        <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        <input type="text" placeholder="Buscar conversas..." id="chatbot-busca-conversas" oninput="chatbot_inteligente_filtrarConversas(this.value)" class="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-marca-500 focus:border-transparent bg-gray-50">
+                    </div>
+                </div>
+                <nav class="flex-1 overflow-y-auto px-2 pb-2" id="chatbot-lista-conversas"></nav>
+                <div class="p-3 border-t border-gray-200">
+                    <div class="flex items-center gap-2 text-xs text-gray-500">
+                        <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                        BlueBot IA Online
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Área Principal do Chat -->
+            <main class="flex-1 flex flex-col bg-gray-50">
+                <!-- Cabeçalho do Chat -->
+                <header class="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between shrink-0">
+                    <div class="flex items-center gap-3">
+                        <div class="relative">
+                            <div class="w-10 h-10 rounded-full bg-marca-600 flex items-center justify-center text-white font-bold text-sm">BB</div>
+                            <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></span>
+                        </div>
+                        <div>
+                            <h2 class="font-semibold text-gray-900 text-sm" id="chatbot-nome-bot">BlueBot IA</h2>
+                            <span class="text-xs text-green-600 flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                                Online — respondendo agora
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="chatbot_inteligente_chamarAtendente()" class="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-marca-700 bg-marca-50 rounded-lg hover:bg-marca-100 transition-colors active:scale-95" title="Chamar atendente humano">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                            Falar com Humano
+                        </button>
+                        <div class="w-px h-6 bg-gray-200 mx-1"></div>
+                        <button onclick="chatbot_inteligente_limparChat()" class="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" title="Limpar conversa">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </button>
+                        <div class="flex items-center gap-1.5 text-xs text-gray-500">
+                            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                            Atendente disponível
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Área de Mensagens -->
+                <div class="flex-1 overflow-y-auto px-6 py-4" id="chatbot-mensagens"></div>
+
+                <!-- Área de Digitação -->
+                <div class="bg-white border-t border-gray-200 px-6 py-4 shrink-0">
+                    <div id="chatbot-sugestoes-rapidas" class="flex flex-wrap gap-2 mb-3"></div>
+                    <div class="flex items-end gap-3">
+                        <div class="flex-1 relative">
+                            <textarea id="chatbot-input" rows="1" placeholder="Digite sua mensagem..." onkeydown="chatbot_inteligente_handleKey(event)" oninput="chatbot_inteligente_autoResize(this)" class="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-marca-500 focus:border-transparent text-sm bg-gray-50 hover:bg-white transition-colors" style="min-height:48px;max-height:120px;"></textarea>
+                            <div class="absolute right-2 bottom-2 flex items-center gap-1">
+                                <button class="p-1.5 text-gray-400 hover:text-marca-600 rounded-lg hover:bg-marca-50 transition-colors" title="Anexar arquivo">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 000 2.828 2 2 0 002.828 0L17 10.414m0 0L17 4h-5.586l-1.293 1.293a1 1 0 01-1.414-1.414L8.586 4H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-4.586z"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <button onclick="chatbot_inteligente_enviar()" class="btn-primary p-3 rounded-xl shrink-0 active:scale-95 transition-transform" title="Enviar mensagem">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </section>
+
+    <script>
+        const chatbot_inteligente_estado = {
+            conversas: [],
+            conversaAtiva: null,
+            etapaQualificacao: 0,
+            atendenteChamado: false,
+            aguardandoResposta: false
+        };
+
+        const chatbot_inteligente_historicoExemplo = [
+            { id: 1, nome: 'João - E-commerce', preview: 'Interessado em automação...', data: '2026-01-20T14:30:00', naoLidas: 2, status: 'qualificado' },
+            { id: 2, nome: 'Maria - Loja Online', preview: 'Quero integrar WhatsApp...', data: '2026-01-20T11:15:00', naoLidas: 0, status: 'novo' },
+            { id: 3, nome: 'Pedro - SaaS', preview: 'Preciso de bot de suporte...', data: '2026-01-19T18:45:00', naoLidas: 0, status: 'negociacao' },
+            { id: 4, nome: 'Ana - Marketplace', preview: 'Orçamento para plataforma...', data: '2026-01-19T09:20:00', naoLidas: 1, status: 'qualificado' },
+            { id: 5, nome: 'Carlos - Varejo', preview: 'Automação de pedidos...', data: '2026-01-18T16:00:00', naoLidas: 0, status: 'fechado' },
+            { id: 6, nome: 'Fernanda - Delivery', preview: 'Chatbot para delivery...', data: '2026-01-18T10:30:00', naoLidas: 0, status: 'novo' }
+        ];
+
+        const chatbot_inteligente_respostasBot = {
+            saudacao: 'Olá! 👋 Bem-vindo à BlueCircuit. Sou o BlueBot IA, seu assistente virtual. Estou aqui para entender suas necessidades e direcionar você da melhor forma possível.\n\nPara começarmos, em qual ramo de atuação sua empresa trabalha?',
+            ramo: 'Ótimo! Trabalhar com *' + '{{ramo}}' + '* é um mercado muito promissor para automação.\n\nAgora me conta: qual o volume médio de pedidos ou interações que você lida por mês?',
+            volume: 'Entendi! Com esse volume, a automação pode gerar um impacto muito positivo.\n\nQual a sua necessidade principal? É automação de vendas, atendimento ao cliente, integração de sistemas ou algo mais?',
+            necessidade: 'Perfeito! Com base no que você me disse, já consigo identificar as melhores soluções para o seu caso.\n\nGostaria de solicitar um orçamento personalizado? Posso direcionar você para um dos nossos especialistas.',
+            orcamento: 'Excelente escolha! Vou conectar você com nosso time comercial. Enquanto isso, deixa eu coletar alguns dados para agilizar o atendimento.\n\nQual o melhor horário para entrarmos em contato?',
+            contato: 'Perfeito! Seu atendente já foi notificado e entrará em contato no horário informado.\n\nEnquanto isso, você pode explorar nosso catálogo de serviços ou acompanhar o status do seu atendimento por aqui. Em que mais posso ajudar?',
+            humano: 'Entendi! Vou transferir você para um atendente humano agora. Por favor, aguarde um momento...'
+        };
+
+        const chatbot_inteligente_sugestoesIniciais = [
+            'Ver status do meu pedido',
+            'Solicitar orçamento personalizado',
+            'Dúvidas sobre produto',
+            'Falar com atendente'
+        ];
+
+        function chatbot_inteligente_inicializar() {
+            chatbot_inteligente_estado.conversas = [...chatbot_inteligente_historicoExemplo];
+            chatbot_inteligente_criarConversaNova();
+            chatbot_inteligente_renderizarConversas();
+            chatbot_inteligente_renderizarSugestoes(chatbot_inteligente_sugestoesIniciais);
+        }
+
+        function chatbot_inteligente_criarConversaNova() {
+            const id = Date.now();
+            const conversa = {
+                id: id,
+                nome: 'Nova Conversa',
+                preview: 'Iniciando...',
+                data: new Date().toISOString(),
+                naoLidas: 0,
+                status: 'novo',
+                mensagens: []
+            };
+            chatbot_inteligente_estado.conversas.unshift(conversa);
+            chatbot_inteligente_selecionarConversa(id);
+        }
+
+        function chatbot_inteligente_selecionarConversa(id) {
+            chatbot_inteligente_estado.conversaAtiva = id;
+            chatbot_inteligente_estado.etapaQualificacao = 0;
+            chatbot_inteligente_renderizarConversas();
+            chatbot_inteligente_renderizarMensagens();
+            const conv = chatbot_inteligente_estado.conversas.find(c => c.id === id);
+            if (conv && conv.mensagens.length === 0 && conv.id < 100000) {
+                setTimeout(() => chatbot_inteligente_adicionarMensagemBot(chatbot_inteligente_respostasBot.saudacao), 600);
+            }
+            document.getElementById('chatbot-input').focus();
+        }
+
+        function chatbot_inteligente_renderizarConversas(filtro) {
+            const container = document.getElementById('chatbot-lista-conversas');
+            const termo = (filtro || '').toLowerCase();
+            const lista = chatbot_inteligente_estado.conversas.filter(c =>
+                !termo || c.nome.toLowerCase().includes(termo) || c.preview.toLowerCase().includes(termo)
+            );
+            if (lista.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-400 text-sm py-8">Nenhuma conversa encontrada</div>';
+                return;
+            }
+            container.innerHTML = lista.map(conv => {
+                const ativa = conv.id === chatbot_inteligente_estado.conversaAtiva;
+                const statusCores = { 'novo': 'bg-blue-100 text-blue-700', 'qualificado': 'bg-green-100 text-green-700', 'negociacao': 'bg-yellow-100 text-yellow-700', 'fechado': 'bg-gray-100 text-gray-700' };
+                const statusLabels = { 'novo': 'Novo', 'qualificado': 'Qualificado', 'negociacao': 'Negociação', 'fechado': 'Fechado' };
+                const dataFormatada = new Date(conv.data).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+                return '<div onclick="chatbot_inteligente_selecionarConversa(' + conv.id + ')" class="p-3 rounded-lg cursor-pointer transition-all duration-200 ' + (ativa ? 'bg-marca-50 border border-marca-200' : 'hover:bg-gray-50 border border-transparent') + '">' +
+                    '<div class="flex items-start justify-between">' +
+                        '<div class="flex-1 min-w-0">' +
+                            '<div class="flex items-center gap-2">' +
+                                '<span class="text-sm font-medium text-gray-900 truncate">' + conv.nome + '</span>' +
+                                (conv.naoLidas > 0 ? '<span class="w-5 h-5 bg-marca-600 text-white text-[10px] rounded-full flex items-center justify-center font-bold shrink-0">' + conv.naoLidas + '</span>' : '') +
+                            '</div>' +
+                            '<p class="text-xs text-gray-500 truncate mt-0.5">' + conv.preview + '</p>' +
+                            '<div class="flex items-center gap-2 mt-1.5">' +
+                                '<span class="text-[10px] text-gray-400">' + dataFormatada + '</span>' +
+                                '<span class="text-[10px] px-1.5 py-0.5 rounded-full font-medium ' + (statusCores[conv.status] || 'bg-gray-100 text-gray-600') + '">' + (statusLabels[conv.status] || conv.status) + '</span>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+        }
+
+        function chatbot_inteligente_filtrarConversas(valor) {
+            chatbot_inteligente_renderizarConversas(valor);
+        }
+
+        function chatbot_inteligente_renderizarMensagens() {
+            const container = document.getElementById('chatbot-mensagens');
+            const conv = chatbot_inteligente_estado.conversas.find(c => c.id === chatbot_inteligente_estado.conversaAtiva);
+            if (!conv || conv.mensagens.length === 0) {
+                container.innerHTML = '<div class="flex flex-col items-center justify-center h-full text-center" id="chatbot-vazio">' +
+                    '<div class="w-20 h-20 rounded-full bg-marca-100 flex items-center justify-center mb-4">' +
+                        '<svg class="w-10 h-10 text-marca-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>' +
+                    '</div>' +
+                    '<h3 class="text-lg font-semibold text-gray-800 mb-1">BlueBot IA</h3>' +
+                    '<p class="text-sm text-gray-500 max-w-sm">Olá! Eu sou o assistente virtual da BlueCircuit. Como posso ajudar você hoje?</p>' +
+                    '<div class="flex flex-wrap gap-2 mt-4 justify-center" id="chatbot-sugestoes-iniciais-tela"></div>' +
+                '</div>';
+                const sugestoesContainer = document.getElementById('chatbot-sugestoes-iniciais-tela');
+                if (sugestoesContainer) {
+                    sugestoesContainer.innerHTML = chatbot_inteligente_sugestoesIniciais.map(s =>
+                        '<button onclick="chatbot_inteligente_usarSugestao(\'' + s + '\')" class="px-4 py-2 bg-white border border-marca-200 text-marca-700 text-sm rounded-full hover:bg-marca-50 hover:border-marca-300 transition-all active:scale-95 shadow-sm">' + s + '</button>'
+                    ).join('');
+                }
+                return;
+            }
+            container.innerHTML = conv.mensagens.map(msg => chatbot_inteligente_renderizarMensagem(msg)).join('');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function chatbot_inteligente_renderizarMensagem(msg) {
+            if (msg.tipo === 'bot') {
+                const textoFormatado = msg.texto.replace(/\*([^*]+)\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+                return '<div class="flex gap-3 mb-4 fade-in">' +
+                    '<div class="w-8 h-8 rounded-full bg-marca-600 flex items-center justify-center text-white text-xs font-bold shrink-0">BB</div>' +
+                    '<div class="max-w-[70%]">' +
+                        '<div class="bg-white border border-gray-200 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">' +
+                            '<p class="text-sm text-gray-800 leading-relaxed">' + textoFormatado + '</p>' +
+                        '</div>' +
+                        '<span class="text-[10px] text-gray-400 mt-1 ml-1">' + msg.hora + '</span>' +
+                    '</div>' +
+                '</div>';
+            } else if (msg.tipo === 'usuario') {
+                return '<div class="flex gap-3 mb-4 justify-end fade-in">' +
+                    '<div class="max-w-[70%]">' +
+                        '<div class="bg-marca-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm">' +
+                            '<p class="text-sm leading-relaxed">' + msg.texto.replace(/\n/g, '<br>') + '</p>' +
+                        '</div>' +
+                        '<span class="text-[10px] text-gray-400 mt-1 mr-1 text-right block">' + msg.hora + '</span>' +
+                    '</div>' +
+                '</div>';
+            } else if (msg.tipo === 'sistema') {
+                return '<div class="flex justify-center mb-4 fade-in">' +
+                    '<div class="bg-green-50 border border-green-200 text-green-800 rounded-full px-4 py-1.5 text-xs font-medium flex items-center gap-1.5">' +
+                        '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>' +
+                        msg.texto +
+                    '</div>' +
+                '</div>';
+            } else if (msg.tipo === 'digitando') {
+                return '<div class="flex gap-3 mb-4 fade-in" id="chatbot-indicador-digitando">' +
+                    '<div class="w-8 h-8 rounded-full bg-marca-600 flex items-center justify-center text-white text-xs font-bold shrink-0">BB</div>' +
+                    '<div class="bg-white border border-gray-200 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">' +
+                        '<div class="flex gap-1"><span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay:0ms"></span><span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay:150ms"></span><span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay:300ms"></span></div>' +
+                    '</div>' +
+                '</div>';
+            }
+            return '';
+        }
+
+        function chatbot_inteligente_adicionarMensagemBot(texto) {
+            const conv = chatbot_inteligente_estado.conversas.find(c => c.id === chatbot_inteligente_estado.conversaAtiva);
+            if (!conv) return;
+            const indicador = document.createElement('div');
+            indicador.innerHTML = '<div class="flex gap-3 mb-4 fade-in"><div class="w-8 h-8 rounded-full bg-marca-600 flex items-center justify-center text-white text-xs font-bold shrink-0">BB</div><div class="bg-white border border-gray-200 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm"><div class="flex gap-1"><span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay:0ms"></span><span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay:150ms"></span><span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay:300ms"></span></div></div></div>';
+            const container = document.getElementById('chatbot-mensagens');
+            container.appendChild(indicador);
+            container.scrollTop = container.scrollHeight;
+            chatbot_inteligente_estado.aguardandoResposta = true;
+            setTimeout(() => {
+                const elIndicador = document.getElementById('chatbot-indicador-digitando');
+                if (elIndicador) elIndicador.remove();
+                chatbot_inteligente_estado.aguardandoResposta = false;
+                conv.mensagens.push({ tipo: 'bot', texto: texto, hora: chatbot_inteligente_horaAtual() });
+                conv.preview = texto.substring(0, 40) + '...';
+                chatbot_inteligente_renderizarMensagens();
+                chatbot_inteligente_renderizarConversas();
+                chatbot_inteligente_atualizarSugestoes();
+            }, 1200 + Math.random() * 800);
+        }
+
+        function chatbot_inteligente_adicionarMensagemUsuario(texto) {
+            const conv = chatbot_inteligente_estado.conversas.find(c => c.id === chatbot_inteligente_estado.conversaAtiva);
+            if (!conv) return;
+            conv.mensagens.push({ tipo: 'usuario', texto: texto, hora: chatbot_inteligente_horaAtual() });
+            conv.preview = texto.substring(0, 40) + (texto.length > 40 ? '...' : '');
+            conv.nome = conv.nome.startsWith('Nova') ? 'Cliente #' + (conv.id % 10000) : conv.nome;
+            chatbot_inteligente_renderizarMensagens();
+            chatbot_inteligente_renderizarConversas();
+        }
+
+        function chatbot_inteligente_adicionarMensagemSistema(texto) {
+            const conv = chatbot_inteligente_estado.conversas.find(c => c.id === chatbot_inteligente_estado.conversaAtiva);
+            if (!conv) return;
+            conv.mensagens.push({ tipo: 'sistema', texto: texto, hora: chatbot_inteligente_horaAtual() });
+            chatbot_inteligente_renderizarMensagens();
+        }
+
+        function chatbot_inteligente_enviar() {
+            const input = document.getElementById('chatbot-input');
+            const texto = input.value.trim();
+            if (!texto || chatbot_inteligente_estado.aguardandoResposta) return;
+            chatbot_inteligente_adicionarMensagemUsuario(texto);
+            input.value = '';
+            input.style.height = '48px';
+            chatbot_inteligente_processarRespostaBot(texto);
+        }
+
+        function chatbot_inteligente_handleKey(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                chatbot_inteligente_enviar();
+            }
+        }
+
+        function chatbot_inteligente_autoResize(el) {
+            el.style.height = '48px';
+            el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+        }
+
+        function chatbot_inteligente_usarSugestao(texto) {
+            if (chatbot_inteligente_estado.aguardandoResposta) return;
+            chatbot_inteligente_adicionarMensagemUsuario(texto);
+            chatbot_inteligente_processarRespostaBot(texto);
+            document.getElementById('chatbot-sugestoes-rapidas').innerHTML = '';
+        }
+
+        function chatbot_inteligente_processarRespostaBot(texto) {
+            const etapa = chatbot_inteligente_estado.etapaQualificacao;
+            const lower = texto.toLowerCase();
+
+            if (lower.includes('humano') || lower.includes('atendente') || lower.includes('pessoa')) {
+                chatbot_inteligente_chamarAtendente();
+                return;
+            }
+            if (lower.includes('pedido') && (lower.includes('status') || lower.includes('rastrear') || lower.includes('acompanhar'))) {
+                setTimeout(() => {
+                    chatbot_inteligente_adicionarMensagemBot('Claro! Vou verificar o status dos seus pedidos. 🤖\n\nPara isso, você pode acessar a seção "Acompanhar Pedidos" aqui no sistema ou me passar o número do pedido que deseja consultar.');
+                }, 400);
+                setTimeout(() => {
+                    chatbot_inteligente_adicionarMensagemSistema('Redirecionando para Acompanhar Pedidos...');
+                }, 2200);
+                return;
+            }
+            if (lower.includes('orçamento') || lower.includes('orcamento') || lower.includes('proposta') || lower.includes('preço')) {
+                setTimeout(() => {
+                    chatbot_inteligente_adicionarMensagemBot('Perfeito! Vou te ajudar a solicitar um orçamento personalizado. 📋\n\nNossa equipe comercial irá preparar uma proposta sob medida para suas necessidades. Em até 24h você receberá um orçamento detalhado por e-mail ou WhatsApp.');
+                }, 400);
+                setTimeout(() => {
+                    chatbot_inteligente_adicionarMensagemSistema('Solicitação de orçamento registrada com sucesso! #OR' + String(Math.floor(Math.random() * 90000) + 10000));
+                }, 2000);
+                return;
+            }
+            if (lower.includes('produto') || lower.includes('catálogo') || lower.includes('catalogo') || lower.includes('serviço') || lower.includes('servico')) {
+                setTimeout(() => {
+                    chatbot_inteligente_adicionarMensagemBot('Nossa plataforma oferece diversas soluções em automação e IA! 🛍️\n\nPosso te mostrar nosso catálogo completo de produtos e serviços. Temos planos para todos os tamanhos de negócio.');
+                }, 400);
+                setTimeout(() => {
+                    chatbot_inteligente_adicionarMensagemBot('Gostaria de explorar nosso catálogo agora? Posso te direcionar para a seção de produtos. 😊');
+                }, 1800);
+                return;
+            }
+
+            setTimeout(() => {
+                const respostas = [
+                    'Entendi! Com base no que você disse, posso te direcionar para a solução ideal.\n\nQuer que eu gere um orçamento ou prefere falar diretamente com um especialista?',
+                    'Ótima pergunta! Nossa plataforma foi desenvolvida pensando em exatamente esse tipo de necessidade.\n\nPosso te mostrar como funciona na prática. Quer agendar uma demonstração?',
+                    'Interessante! Esse é um cenário em que a automação traz resultados muito rápidos.\n\nDeixa eu te passar mais detalhes sobre como podemos implementar isso para você.'
+                ];
+                const resposta = respostas[Math.floor(Math.random() * respostas.length)];
+                chatbot_inteligente_adicionarMensagemBot(resposta);
+            }, 500);
+        }
+
+        function chatbot_inteligente_chamarAtendente() {
+            if (chatbot_inteligente_estado.atendenteChamado) {
+                toast('Um atendente já foi chamado para esta conversa.', 'info');
+                return;
+            }
+            chatbot_inteligente_estado.atendenteChamado = true;
+            chatbot_inteligente_adicionarMensagemSistema('Atendente humano solicitado! Conectando em instantes...');
+            setTimeout(() => {
+                chatbot_inteligente_adicionarMensagemBot('Olá! Sou a *Camila*, atendente da BlueCircuit. 😊\n\nVi que você precisa de ajuda. Estou aqui para resolver qualquer dúvida e ajudar você a encontrar a melhor solução para seu negócio. O que posso fazer por você?');
+                toast('Atendente Camila conectado ao chat.', 'ok');
+            }, 2000);
+        }
+
+        function chatbot_inteligente_novaConversa() {
+            chatbot_inteligente_estado.etapaQualificacao = 0;
+            chatbot_inteligente_estado.atendenteChamado = false;
+            chatbot_inteligente_estado.aguardandoResposta = false;
+            chatbot_inteligente_criarConversaNova();
+            chatbot_inteligente_renderizarSugestoes(chatbot_inteligente_sugestoesIniciais);
+        }
+
+        function chatbot_inteligente_limparChat() {
+            const conv = chatbot_inteligente_estado.conversas.find(c => c.id === chatbot_inteligente_estado.conversaAtiva);
+            if (conv) {
+                conv.mensagens = [];
+                conv.nome = 'Nova Conversa';
+                conv.preview = 'Iniciando...';
+                conv.status = 'novo';
+                chatbot_inteligente_estado.etapaQualificacao = 0;
+                chatbot_inteligente_estado.atendenteChamado = false;
+                chatbot_inteligente_renderizarMensagens();
+                chatbot_inteligente_renderizarConversas();
+                chatbot_inteligente_renderizarSugestoes(chatbot_inteligente_sugestoesIniciais);
+                setTimeout(() => chatbot_inteligente_adicionarMensagemBot(chatbot_inteligente_respostasBot.saudacao), 400);
+                toast('Chat limpo com sucesso!', 'ok');
+            }
+        }
+
+        function chatbot_inteligente_renderizarSugestoes(sugestoes) {
+            const container = document.getElementById('chatbot-sugestoes-rapidas');
+            if (!container) return;
+            container.innerHTML = sugestoes.map(s =>
+                '<button onclick="chatbot_inteligente_usarSugestao(\'' + s + '\')" class="px-3 py-1.5 bg-white border border-marca-200 text-marca-700 text-xs rounded-full hover:bg-marca-50 hover:border-marca-300 transition-all active:scale-95 shadow-sm whitespace-nowrap">' + s + '</button>'
+            ).join('');
+        }
+
+        function chatbot_inteligente_atualizarSugestoes() {
+            const etapa = chatbot_inteligente_estado.etapaQualificacao;
+            if (etapa === 0) chatbot_inteligente_renderizarSugestoes(chatbot_inteligente_sugestoesIniciais);
+            else if (etapa === 1) chatbot_inteligente_renderizarSugestoes(['E-commerce', 'SaaS', 'Serviços', 'Indústria', 'Saúde', 'Outro']);
+            else if (etapa === 2) chatbot_inteligente_renderizarSugestoes(['Até 100/mês', '100-500/mês', '500-2000/mês', '2000+/mês']);
+            else if (etapa === 3) chatbot_inteligente_renderizarSugestoes(['Automação de vendas', 'Atendimento ao cliente', 'Integração de sistemas', 'Relatórios e insights']);
+            else chatbot_inteligente_renderizarSugestoes(['Sim, solicitar orçamento', 'Ver catálogo de produtos', 'Falar com atendente']);
+        }
+
+        function chatbot_inteligente_horaAtual() {
+            return new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        const btnPrimaryClass = 'bg-marca-600 hover:bg-marca-700 text-white';
+        document.head.insertAdjacentHTML('beforeend', '<style>.btn-primary{transition:all .15s ease}.btn-primary:hover{box-shadow:0 2px 8px rgba(30,58,95,.2)}</style>');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (document.querySelector('[data-tela="chatbot-inteligente"]')) {
+                chatbot_inteligente_inicializar();
+            }
+        });
+    </script>
+
     <!-- TELAS -->
     </main>
 
