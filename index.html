@@ -2397,6 +2397,377 @@ window._catalogo_refresh=function(){catalogo_de_produtos_aplicarFiltros();};
   (function init() { dashboard_de_vendas_renderTabela(DASHBOARD_LEADS); })();
 </script>
 
+    <section data-tela="gestao-de-clientes" class="hidden">
+  <div class="p-6 lg:p-8 max-w-[1280px] mx-auto space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+      <div>
+        <h1 class="font-display text-2xl lg:text-3xl font-bold text-marca-900 tracking-tight">Gestão de Clientes</h1>
+        <p class="text-gray-500 mt-1 text-sm">Gerencie leads, oportunidades e clientes ativos no funil de vendas.</p>
+      </div>
+      <button onclick="gestao_de_clientes_abrirFormulario()" class="btn-primary inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 active:scale-95" style="background:#2563EB;color:#fff;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Novo Cliente
+      </button>
+    </div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="gestao-stats">
+      <div class="card rounded-xl p-4 border border-gray-100">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs text-gray-500 font-medium uppercase tracking-wide">Total Clientes</p>
+            <p class="text-2xl font-bold text-marca-900 mt-1">248</p>
+            <p class="text-xs text-green-600 font-medium mt-1 flex items-center gap-1"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>+12 este mês</p>
+          </div>
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:#1E3A5F15;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E3A5F" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+        </div>
+      </div>
+      <div class="card rounded-xl p-4 border border-gray-100">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs text-gray-500 font-medium uppercase tracking-wide">Oportunidades</p>
+            <p class="text-2xl font-bold text-marca-900 mt-1">37</p>
+            <p class="text-xs text-amber-600 font-medium mt-1">Aguardando contato</p>
+          </div>
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:#2563EB15;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        </div>
+      </div>
+      <div class="card rounded-xl p-4 border border-gray-100">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs text-gray-500 font-medium uppercase tracking-wide">Receita Total</p>
+            <p class="text-2xl font-bold text-marca-900 mt-1">R$ 182.450</p>
+            <p class="text-xs text-green-600 font-medium mt-1 flex items-center gap-1"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>+8,3%</p>
+          </div>
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:#1E3A5F15;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E3A5F" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        </div>
+      </div>
+      <div class="card rounded-xl p-4 border border-gray-100">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs text-gray-500 font-medium uppercase tracking-wide">Taxa Conversão</p>
+            <p class="text-2xl font-bold text-marca-900 mt-1">23,5%</p>
+            <p class="text-xs text-green-600 font-medium mt-1 flex items-center gap-1"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>+3,2%</p>
+          </div>
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:#2563EB15;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card rounded-xl border border-gray-100 p-4">
+      <div class="flex flex-col sm:flex-row gap-3">
+        <div class="relative flex-1">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="gestao-busca" placeholder="Buscar por nome ou e-mail..." oninput="gestao_de_clientes_buscar()" class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-marca-200 focus:border-marca-400 transition-all font-body bg-white">
+        </div>
+        <div class="flex gap-2 flex-wrap" id="gestao-filtros">
+          <button onclick="gestao_de_clientes_filtrar('todos')" data-filtro="todos" class="gestao-filtro-btn px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-marca-900 text-white">Todos</button>
+          <button onclick="gestao_de_clientes_filtrar('lead')" data-filtro="lead" class="gestao-filtro-btn px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-gray-100 text-gray-600 hover:bg-gray-200">Lead</button>
+          <button onclick="gestao_de_clientes_filtrar('oportunidade')" data-filtro="oportunidade" class="gestao-filtro-btn px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-gray-100 text-gray-600 hover:bg-gray-200">Oportunidade</button>
+          <button onclick="gestao_de_clientes_filtrar('ativo')" data-filtro="ativo" class="gestao-filtro-btn px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-gray-100 text-gray-600 hover:bg-gray-200">Cliente Ativo</button>
+          <button onclick="gestao_de_clientes_filtrar('inativo')" data-filtro="inativo" class="gestao-filtro-btn px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-gray-100 text-gray-600 hover:bg-gray-200">Inativo</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card rounded-xl border border-gray-100 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-100" style="background:#F8FAFC;">
+              <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wider">Cliente</th>
+              <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wider hidden md:table-cell">E-mail</th>
+              <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wider hidden lg:table-cell">Telefone</th>
+              <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wider hidden xl:table-cell">Última Compra</th>
+              <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wider hidden lg:table-cell">Total Gasto</th>
+              <th class="text-left px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wider">Status</th>
+              <th class="text-center px-5 py-3 font-semibold text-gray-500 text-xs uppercase tracking-wider w-24">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="gestao-tabela"></tbody>
+        </table>
+      </div>
+      <div id="gestao-vazio" class="hidden text-center py-16 px-4">
+        <svg class="mx-auto text-gray-300 mb-3" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5-2 4-2 4 2 4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        <p class="text-gray-500 text-sm font-medium">Nenhum cliente encontrado</p>
+        <p class="text-gray-400 text-xs mt-1">Tente ajustar os filtros ou a busca.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="gestao-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto" id="gestao-modal-conteudo"></div>
+  </div>
+
+  <div id="gestao-modal-form" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full max-h-[85vh] overflow-y-auto">
+      <div class="p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="font-display text-xl font-bold text-marca-900">Cadastrar Novo Cliente</h2>
+          <button onclick="gestao_de_clientes_fecharFormulario()" class="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-lg hover:bg-gray-100"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <form onsubmit="event.preventDefault(); gestao_de_clientes_salvarCliente();" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">Nome Completo</label>
+              <input type="text" id="form-nome" required class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-marca-200 focus:border-marca-400 bg-white font-body" placeholder="Ex: Ana Carolina Silva">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">E-mail</label>
+              <input type="email" id="form-email" required class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-marca-200 focus:border-marca-400 bg-white font-body" placeholder="ana@email.com">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">Telefone / WhatsApp</label>
+              <input type="tel" id="form-telefone" required class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-marca-200 focus:border-marca-400 bg-white font-body" placeholder="(11) 99876-5432" oninput="gestao_de_clientes_mascaraTel(this)">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">Status no Funil</label>
+              <select id="form-status" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-marca-200 focus:border-marca-400 bg-white font-body">
+                <option value="lead">Lead</option>
+                <option value="oportunidade">Oportunidade</option>
+                <option value="ativo">Cliente Ativo</option>
+                <option value="inativo">Inativo</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">Tags</label>
+              <select id="form-tags" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-marca-200 focus:border-marca-400 bg-white font-body">
+                <option value="">Nenhuma</option>
+                <option value="VIP">VIP</option>
+                <option value="Recorrente">Recorrente</option>
+                <option value="Potencial">Potencial</option>
+              </select>
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">Endereço</label>
+              <input type="text" id="form-endereco" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-marca-200 focus:border-marca-400 bg-white font-body" placeholder="Rua, número, bairro, cidade - UF">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">Fonte</label>
+              <input type="text" id="form-fonte" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-marca-200 focus:border-marca-400 bg-white font-body" placeholder="Ex: Instagram, Google Ads">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">Observações</label>
+              <input type="text" id="form-obs" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-marca-200 focus:border-marca-400 bg-white font-body" placeholder="Notas sobre o cliente">
+            </div>
+          </div>
+          <div class="flex justify-end gap-3 pt-3 border-t border-gray-100">
+            <button type="button" onclick="gestao_de_clientes_fecharFormulario()" class="px-5 py-2.5 rounded-lg text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 transition-all duration-200">Cancelar</button>
+            <button type="submit" class="btn-primary px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 hover:shadow-lg active:scale-95" style="background:#2563EB;color:#fff;">Salvar Cliente</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const gestao_clientes = [
+      { id: 1, nome: 'Ana Carolina Ferreira', email: 'ana.ferreira@email.com', telefone: '(11) 99876-5432', ultimaCompra: '2025-12-10', totalGasto: 14890.50, status: 'ativo', tags: ['VIP','Recorrente'], leadScore: 92, endereco: 'Av. Paulista, 1578, Bela Vista, São Paulo - SP', fonte: 'Instagram', obs: 'Cliente desde 2023, prefere atendimento por WhatsApp.', pedidos: [{data:'2025-12-10',valor:1250.00,itens:'3x Camiseta Premium + 1x Calça Jeans Slim'},{data:'2025-10-22',valor:890.00,itens:'2x Jaqueta Corta-Vento'},{data:'2025-08-15',valor:2300.00,itens:'Coleção Inverno - 5 peças'},{data:'2025-06-03',valor:1450.00,itens:'Moda Verão - 4 peças'}], interacoes: [{data:'2025-12-11',tipo:'WhatsApp',texto:'Cliente solicitou troca de tamanho na calça'},{data:'2025-11-20',tipo:'Chatbot',texto:'Perguntou sobre prazo de entrega para Belo Horizonte'},{data:'2025-10-23',tipo:'WhatsApp',texto:'Agradeceu pelo atendimento rápido'}] },
+      { id: 2, nome: 'Pedro Henrique Lima', email: 'pedro.lima@email.com', telefone: '(21) 98765-4321', ultimaCompra: '2025-11-28', totalGasto: 3250.00, status: 'oportunidade', tags: ['Potencial'], leadScore: 68, endereco: 'Rua das Laranjeiras, 234, Botafogo, Rio de Janeiro - RJ', fonte: 'Google Ads', obs: 'Interessado em moda fitness.', pedidos: [{data:'2025-11-28',valor:3200.00,itens:'Kit Treino Completo - 5 peças'}], interacoes: [{data:'2025-12-01',tipo:'Chatbot',texto:'Perguntou sobre disponibilidade de P'},{data:'2025-11-29',tipo:'WhatsApp',texto:'Confirmou recebimento, elogiou qualidade'}] },
+      { id: 3, nome: 'Mariana Costa Oliveira', email: 'mariana.oliveira@email.com', telefone: '(31) 97654-3210', ultimaCompra: '2025-12-05', totalGasto: 5670.00, status: 'ativo', tags: ['Recorrente'], leadScore: 85, endereco: 'Rua da Bahia, 889, Centro, Belo Horizonte - MG', fonte: 'Indicação', obs: 'Compra a cada 2 meses aproximadamente.', pedidos: [{data:'2025-12-05',valor:1890.00,itens:'Vestido Festa + Acessórios'},{data:'2025-09-14',valor:2100.00,itens:'Coleção Primavera - 4 peças'},{data:'2025-06-20',valor:1680.00,itens:'Moda casual - 3 peças'}], interacoes: [{data:'2025-12-06',tipo:'Chatbot',texto:'Perguntou sobre cartão-presente'},{data:'2025-11-15',tipo:'WhatsApp',texto:'Confirmou participação em promoção'} ] },
+      { id: 4, nome: 'Lucas Gabriel Souza', email: 'lucas.souza@email.com', telefone: '(41) 96543-2109', ultimaCompra: '2025-08-20', totalGasto: 890.00, status: 'inativo', tags: [], leadScore: 22, endereco: 'Rua XV de Novembro, 456, Centro, Curitiba - PR', fonte: 'Facebook Ads', obs: 'Não compra há 4 meses.', pedidos: [{data:'2025-08-20',valor:890.00,itens:'1x Camiseta + 1x Bermuda'}], interacoes: [{data:'2025-09-01',tipo:'Chatbot',texto:'Abandonou carrinho de compras'}] },
+      { id: 5, nome: 'Fernanda Rocha Mendes', email: 'fernanda.mendes@email.com', telefone: '(51) 95432-1098', ultimaCompra: '2025-12-01', totalGasto: 22140.00, status: 'ativo', tags: ['VIP'], leadScore: 97, endereco: 'Av. Ipiranga, 3200, Jardim Botânico, Porto Alegre - RS', fonte: 'Indicação', obs: 'Maior cliente da região Sul. Atendimento preferencial.', pedidos: [{data:'2025-12-01',valor:4500.00,itens:'Coleção Exclusiva Natal - 6 peças'},{data:'2025-11-10',valor:3800.00,itens:'Casaco Couro + Acessórios'},{data:'2025-10-05',valor:5200.00,itens:'Vestido Gala + Sapato'},{data:'2025-08-18',valor:3640.00,itens:'Moda Inverno - 5 peças'},{data:'2025-06-22',valor:5000.00,itens:'Malas de viagem + Acessórios'}], interacoes: [{data:'2025-12-02',tipo:'WhatsApp',texto:'Solicitou nota fiscal do pedido'},{data:'2025-11-11',tipo:'Telefone',texto:'Ligou para confirmar alteração de endereço de entrega'},{data:'2025-10-06',tipo:'Chatbot',texto:'Solicitou cupom de aniversário'}] },
+      { id: 6, nome: 'Rafael Augusto Dias', email: 'rafael.dias@email.com', telefone: '(61) 94321-0987', ultimaCompra: '2025-11-15', totalGasto: 1450.00, status: 'lead', tags: ['Potencial'], leadScore: 45, endereco: 'SQN 204, Bloco B, Apt 302, Brasília - DF', fonte: 'Site Orgânico', obs: 'Visitou o site 8 vezes este mês. Ainda não comprou.', pedidos: [], interacoes: [{data:'2025-12-10',tipo:'Chatbot',texto:'Perguntou sobre formas de pagamento parcelado'},{data:'2025-11-18',tipo:'Chatbot',texto:'Visualizou catálogo completo'},{data:'2025-11-15',tipo:'Chatbot',texto:'Cadastrou-se no site via landing page'}] },
+      { id: 7, nome: 'Juliana Martins Pereira', email: 'juliana.pereira@email.com', telefone: '(71) 93210-9876', ultimaCompra: '2025-10-30', totalGasto: 3890.00, status: 'ativo', tags: ['Recorrente'], leadScore: 78, endereco: 'Rua Chile, 150, Centro, Salvador - BA', fonte: 'Instagram', obs: 'Cliente fiel, sempre deixa review positiva.', pedidos: [{data:'2025-10-30',valor:1550.00,itens:'Coleção Verão - 3 peças'},{data:'2025-08-12',valor:1340.00,itens:'Moda casual feminina - 2 peças'},{data:'2025-05-20',valor:1000.00,itens:'1x Vestido midi'}], interacoes: [{data:'2025-10-31',tipo:'WhatsApp',texto:'Enviou foto usando a roupa, agradeceu'},{data:'2025-09-01',tipo:'Chatbot',texto:'Consultou sobre troca de cor disponível'}] },
+      { id: 8, nome: 'Bruno Eduardo Vasconcelos', email: 'bruno.vas@email.com', telefone: '(91) 92109-8765', ultimaCompra: '2025-07-08', totalGasto: 650.00, status: 'inativo', tags: [], leadScore: 15, endereco: 'Travessa Quintino Bocaiúva, 78, Reduto, Belém - PA', fonte: 'Mercado Livre', obs: 'Compra única de baixo valor. Sem retorno.', pedidos: [{data:'2025-07-08',valor:650.00,itens:'1x Camiseta básica + 1x Boné'}], interacoes: [] },
+      { id: 9, nome: 'Camila Andrade Nunes', email: 'camila.nunes@email.com', telefone: '(48) 91098-7654', ultimaCompra: '2025-12-08', totalGasto: 9780.00, status: 'ativo', tags: ['VIP'], leadScore: 94, endereco: 'Av. Beira-Mar Norte, 2500, Centro, Florianópolis - SC', fonte: 'Indicação', obs: 'Influenciadora local, compartilha marca nas redes.', pedidos: [{data:'2025-12-08',valor:3200.00,itens:'Coleção Premium Inverno'},{data:'2025-11-02',valor:1980.00,itens:'Vestido de festa + Bolsa'},{data:'2025-09-20',valor:2600.00,itens:'Conjunto Casual Executivo'},{data:'2025-07-15',valor:2000.00,itens:'Moda Praia Coleção'},{data:'2025-04-10',valor:1500.00,itens:'Jaqueta Jeans + Acessórios'}], interacoes: [{data:'2025-12-09',tipo:'Instagram DM',texto:'Marcou perfil da marca nos stories'},{data:'2025-11-03',tipo:'WhatsApp',texto:'Solicitou desconto para presente corporativo'},{data:'2025-09-21',tipo:'Chatbot',texto:'Pediu código de rastreio'}] },
+      { id: 10, nome: 'Thiago Rodrigo Barbosa', email: 'thiago.barbosa@email.com', telefone: '(62) 99887-7665', ultimaCompra: '2025-11-20', totalGasto: 2150.00, status: 'oportunidade', tags: ['Potencial'], leadScore: 71, endereco: 'Av. T-63, 1456, Setor Bueno, Goiânia - GO', fonte: 'Google Ads', obs: 'Interessado em moda masculina social.', pedidos: [{data:'2025-11-20',valor:2150.00,itens:'Camisa Social Premium + Calça Alfaiataria + Cinto'}], interacoes: [{data:'2025-11-21',tipo:'WhatsApp',texto:'Perguntou se aceitamos troca por tamanho'},{data:'2025-11-20',tipo:'Chatbot',texto:'Finalizou pedido após 3 sessões no site'}] }
+    ];
+
+    let gestao_filtroAtual = 'todos';
+    let gestao_buscaAtual = '';
+
+    function gestao_de_clientes_statusBadge(status) {
+      const map = {
+        lead: { bg:'bg-amber-50', text:'text-amber-700', border:'border-amber-200', label:'Lead' },
+        oportunidade: { bg:'bg-blue-50', text:'text-blue-700', border:'border-blue-200', label:'Oportunidade' },
+        ativo: { bg:'bg-emerald-50', text:'text-emerald-700', border:'border-emerald-200', label:'Cliente Ativo' },
+        inativo: { bg:'bg-gray-100', text:'text-gray-500', border:'border-gray-200', label:'Inativo' }
+      };
+      const s = map[status] || map.lead;
+      return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ' + s.bg + ' ' + s.text + ' ' + s.border + '">' + s.label + '</span>';
+    }
+
+    function gestao_de_clientes_leadScore(score) {
+      const cor = score >= 80 ? '#059669' : score >= 50 ? '#d97706' : '#94a3b8';
+      return '<div class="flex items-center gap-1.5" title="Lead Score: ' + score + '/100">' +
+        '<div class="w-14 h-1.5 rounded-full bg-gray-100 overflow-hidden"><div class="h-full rounded-full transition-all duration-500" style="width:' + score + '%;background:' + cor + ';"></div></div>' +
+        '<span class="text-xs font-bold tabular-nums" style="color:' + cor + ';">' + score + '</span></div>';
+    }
+
+    function gestao_de_clientes_tagsHTML(tags) {
+      if (!tags || tags.length === 0) return '<span class="text-xs text-gray-400">—</span>';
+      const tagColors = { 'VIP':'bg-purple-50 text-purple-700 border-purple-200', 'Recorrente':'bg-teal-50 text-teal-700 border-teal-200', 'Potencial':'bg-orange-50 text-orange-700 border-orange-200' };
+      return tags.map(t => '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold border ' + (tagColors[t] || 'bg-gray-50 text-gray-600 border-gray-200') + '">' + t + '</span>').join(' ');
+    }
+
+    function gestao_de_clientes_iniciais(nome) {
+      return nome.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+    }
+
+    const coresAvatar = ['#1E3A5F','#2563EB','#059669','#d97706','#7c3aed','#db2777'];
+    function gestao_de_clientes_avatar(nome, id) {
+      const cor = coresAvatar[(id - 1) % coresAvatar.length];
+      return '<div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0" style="background:' + cor + ';">' + gestao_de_clientes_iniciais(nome) + '</div>';
+    }
+
+    function gestao_de_clientes_whatsapp(telefone) {
+      const num = telefone.replace(/\D/g, '');
+      return '<a href="https://wa.me/55' + num + '" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Contatar via WhatsApp" class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-green-50 text-green-600 hover:bg-green-100 transition-all duration-200 hover:scale-110"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>';
+    }
+
+    function gestao_de_clientes_ver(id) {
+      const c = gestao_clientes.find(x => x.id === id);
+      if (!c) return;
+      const valorTotalPedidos = c.pedidos.reduce((s, p) => s + p.valor, 0);
+      const pedidosHTML = c.pedidos.length > 0 ? c.pedidos.map(p =>
+        '<tr class="border-b border-gray-50"><td class="px-3 py-2 text-xs text-gray-600">' + dataBR(p.data) + '</td><td class="px-3 py-2 text-xs font-semibold text-marca-900">' + brl(p.valor) + '</td><td class="px-3 py-2 text-xs text-gray-500">' + p.itens + '</td></tr>'
+      ).join('') : '<tr><td colspan="3" class="px-3 py-4 text-xs text-gray-400 text-center">Nenhum pedido registrado</td></tr>';
+
+      const interacoesHTML = c.interacoes.length > 0 ? c.interacoes.map(i =>
+        '<div class="flex gap-3 py-2 border-b border-gray-50 last:border-0">' +
+          '<div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style="background:' + (i.tipo === 'WhatsApp' ? '#dcfce7' : i.tipo === 'Telefone' ? '#ede9fe' : '#dbeafe') + ';">' +
+            (i.tipo === 'WhatsApp' ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="#059669"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>' : i.tipo === 'Telefone' ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>' : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>') +
+          '</div>' +
+          '<div class="flex-1 min-w-0">' +
+            '<div class="flex items-center gap-2 mb-0.5">' +
+              '<span class="text-xs font-semibold text-marca-900">' + i.tipo + '</span>' +
+              '<span class="text-xs text-gray-400">' + dataBR(i.data) + '</span>' +
+            '</div>' +
+            '<p class="text-xs text-gray-500 leading-relaxed">' + i.texto + '</p>' +
+          '</div>' +
+        '</div>'
+      ).join('') : '<p class="text-xs text-gray-400 text-center py-3">Nenhuma interação registrada</p>';
+
+      const html = '<div class="p-6">' +
+        '<div class="flex items-center gap-4 mb-6">' +
+          gestao_de_clientes_avatar(c.nome, c.id) +
+          '<div class="flex-1 min-w-0">' +
+            '<h3 class="font-display text-lg font-bold text-marca-900 truncate">' + c.nome + '</h3>' +
+            '<p class="text-sm text-gray-500">' + c.email + '</p>' +
+          '</div>' +
+          '<a href="https://wa.me/55' + c.telefone.replace(/\D/g,'') + '" target="_blank" rel="noopener" class="shrink-0 w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center hover:bg-green-100 transition-all hover:scale-110"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>' +
+        '</div>' +
+        '<div class="flex flex-wrap gap-3 mb-5">' +
+          gestao_de_clientes_statusBadge(c.status) +
+          gestao_de_clientes_tagsHTML(c.tags) +
+          '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold border bg-gray-50 text-gray-600 border-gray-200">' +
+            '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>' +
+            'Score: ' + c.leadScore + '/100</span>' +
+        '</div>' +
+        '<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">' +
+          '<div class="bg-gray-50 rounded-xl p-4"><p class="text-xs text-gray-500 font-medium uppercase tracking-wide mb-2">Contato</p><div class="space-y-1.5"><p class="text-sm text-gray-700 flex items-center gap-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>' + c.email + '</p><p class="text-sm text-gray-700 flex items-center gap-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>' + c.telefone + '</p><p class="text-sm text-gray-700 flex items-center gap-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>' + c.endereco + '</p></div></div>' +
+          '<div class="bg-gray-50 rounded-xl p-4"><p class="text-xs text-gray-500 font-medium uppercase tracking-wide mb-2">Financeiro</p><div class="space-y-1.5"><p class="text-sm text-gray-700 flex items-center gap-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Total gasto: <strong class="text-marca-900 ml-auto">' + brl(c.totalGasto) + '</strong></p><p class="text-sm text-gray-700 flex items-center gap-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Última compra: <strong class="text-marca-900 ml-auto">' + dataBR(c.ultimaCompra) + '</strong></p><p class="text-sm text-gray-700 flex items-center gap-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>Total pedidos: <strong class="text-marca-900 ml-auto">' + c.pedidos.length + ' (' + brl(valorTotalPedidos) + ')</strong></p></div></div>' +
+        '</div>' +
+        '<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">' +
+          '<div class="bg-gray-50 rounded-xl p-4"><p class="text-xs text-gray-500 font-medium uppercase tracking-wide mb-3">Histórico de Pedidos</p><div class="overflow-x-auto"><table class="w-full text-xs"><thead><tr class="border-b border-gray-200"><th class="text-left py-1.5 text-gray-400 font-medium">Data</th><th class="text-left py-1.5 text-gray-400 font-medium">Valor</th><th class="text-left py-1.5 text-gray-400 font-medium">Itens</th></tr></thead><tbody>' + pedidosHTML + '</tbody></table></div></div>' +
+          '<div class="bg-gray-50 rounded-xl p-4"><p class="text-xs text-gray-500 font-medium uppercase tracking-wide mb-3">Interações no Chatbot</p><div class="max-h-52 overflow-y-auto">' + interacoesHTML + '</div></div>' +
+        '</div>' +
+        '<div class="bg-gray-50 rounded-xl p-4 mb-5"><p class="text-xs text-gray-500 font-medium uppercase tracking-wide mb-1">Fonte</p><p class="text-sm text-gray-700">' + (c.fonte || '—') + '</p><p class="text-xs text-gray-500 mt-2 font-medium uppercase tracking-wide mb-1">Observações</p><p class="text-sm text-gray-700">' + (c.obs || '—') + '</p></div>' +
+        '<div class="flex justify-end gap-3 pt-3 border-t border-gray-100">' +
+          '<button onclick="gestao_de_clientes_editarStatus(' + c.id + ')" class="px-4 py-2 rounded-lg text-sm font-medium border border-gray-200 text-gray-600 hover:bg-gray-50 transition-all duration-200">Editar Status</button>' +
+          '<button onclick="fecharModal(); toast(\'Cliente atualizado com sucesso!\', \'ok\');" class="px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 hover:shadow-lg active:scale-95" style="background:#2563EB;color:#fff;">Confirmar Alterações</button>' +
+        '</div>' +
+      '</div>';
+      abrirModal(html, 'Perfil do Cliente');
+    }
+
+    function gestao_de_clientes_editarStatus(id) {
+      const c = gestao_clientes.find(x => x.id === id);
+      if (!c) return;
+      const statuses = ['lead','oportunidade','ativo','inativo'];
+      const novo = statuses[(statuses.indexOf(c.status) + 1) % statuses.length];
+      c.status = novo;
+      gestao_de_clientes_render();
+      fecharModal();
+      toast('Status de ' + c.nome + ' atualizado para ' + (novo === 'lead' ? 'Lead' : novo === 'oportunidade' ? 'Oportunidade' : novo === 'ativo' ? 'Cliente Ativo' : 'Inativo'), 'ok');
+    }
+
+    function gestao_de_clientes_contatoWhatsApp(id) {
+      const c = gestao_clientes.find(x => x.id === id);
+      if (!c) return;
+      toast('Abrindo WhatsApp de ' + c.nome.split(' ')[0] + '...', 'info');
+    }
+
+    function gestao_de_clientes_render() {
+      const tbody = document.getElementById('gestao-tabela');
+      const vazio = document.getElementById('gestao-vazio');
+      let lista = gestao_clientes;
+      if (gestao_filtroAtual !== 'todos') lista = lista.filter(c => c.status === gestao_filtroAtual);
+      if (gestao_buscaAtual) { const q = gestao_buscaAtual.toLowerCase(); lista = lista.filter(c => c.nome.toLowerCase().includes(q) || c.email.toLowerCase().includes(q)); }
+      if (lista.length === 0) { tbody.innerHTML = ''; vazio.classList.remove('hidden'); return; }
+      vazio.classList.add('hidden');
+      tbody.innerHTML = lista.map(c => '<tr class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors duration-150 cursor-pointer" onclick="gestao_de_clientes_ver(' + c.id + ')">' +
+        '<td class="px-5 py-3.5"><div class="flex items-center gap-3">' + gestao_de_clientes_avatar(c.nome, c.id) + '<div class="min-w-0"><p class="font-semibold text-marca-900 truncate text-sm">' + c.nome + '</p>' + (c.tags.length ? '<div class="flex gap-1 mt-1">' + gestao_de_clientes_tagsHTML(c.tags) + '</div>' : '') + '</div></div></td>' +
+        '<td class="px-5 py-3.5 text-xs text-gray-500 hidden md:table-cell truncate max-w-[200px]">' + c.email + '</td>' +
+        '<td class="px-5 py-3.5 text-xs text-gray-500 hidden lg:table-cell">' + c.telefone + '</td>' +
+        '<td class="px-5 py-3.5 text-xs text-gray-500 hidden xl:table-cell">' + dataBR(c.ultimaCompra) + '</td>' +
+        '<td class="px-5 py-3.5 text-sm font-semibold text-marca-900 hidden lg:table-cell tabular-nums">' + brl(c.totalGasto) + '</td>' +
+        '<td class="px-5 py-3.5">' + gestao_de_clientes_statusBadge(c.status) + '</td>' +
+        '<td class="px-5 py-3.5"><div class="flex items-center justify-center gap-1.5">' +
+          gestao_de_clientes_whatsapp(c.telefone) +
+          '<button onclick="event.stopPropagation(); gestao_de_clientes_ver(' + c.id + ')" title="Ver perfil completo" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 hover:text-marca-900 hover:bg-marca-50 transition-all duration-200"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>' +
+        '</div></td></tr>'
+      ).join('');
+    }
+
+    function gestao_de_clientes_buscar() {
+      gestao_buscaAtual = document.getElementById('gestao-busca').value.trim();
+      gestao_de_clientes_render();
+    }
+
+    function gestao_de_clientes_filtrar(filtro) {
+      gestao_filtroAtual = filtro;
+      document.querySelectorAll('.gestao-filtro-btn').forEach(b => {
+        if (b.dataset.filtro === filtro) { b.className = 'gestao-filtro-btn px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-marca-900 text-white'; }
+        else { b.className = 'gestao-filtro-btn px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-gray-100 text-gray-600 hover:bg-gray-200'; }
+      });
+      gestao_de_clientes_render();
+    }
+
+    function gestao_de_clientes_abrirFormulario() {
+      document.getElementById('gestao-modal-form').classList.remove('hidden');
+      document.getElementById('gestao-modal-form').classList.add('flex');
+      document.getElementById('form-nome').focus();
+    }
+
+    function gestao_de_clientes_fecharFormulario() {
+      document.getElementById('gestao-modal-form').classList.add('hidden');
+      document.getElementById('gestao-modal-form').classList.remove('flex');
+    }
+
+    function gestao_de_clientes_salvarCliente() {
+      const nome = document.getElementById('form-nome').value.trim();
+      const email = document.getElementById('form-email').value.trim();
+      const telefone = document.getElementById('form-telefone').value.trim();
+      const status = document.getElementById('form-status').value;
+      const tagsRaw = document.getElementById('form-tags').value;
+      const endereco = document.getElementById('form-endereco').value.trim();
+      const fonte = document.getElementById('form-fonte').value.trim();
+      const obs = document.getElementById('form-obs').value.trim();
+      if (!nome || !email || !telefone) { toast('Preencha todos os campos obrigatórios.', 'erro'); return; }
+      const tags = tagsRaw ? [tagsRaw] : [];
+      const novo = { id: Date.now() % 10000, nome: nome, email: email, telefone: telefone, ultimaCompra: '—', totalGasto: 0, status: status, tags: tags, leadScore: 35, endereco: endereco || 'Não informado', fonte: fonte || 'Não informado', obs: obs || '', pedidos: [], interacoes: [] };
+      gestao_clientes.unshift(novo);
+      gestao_de_clientes_fecharFormulario();
+      gestao_de_clientes_render();
+      toast(nome + ' cadastrado com sucesso!', 'ok');
+      document.getElementById('gestao-modal-form').querySelector('form') && document.getElementById('gestao-modal-form').querySelector('form').reset();
+    }
+
+    function gestao_de_clientes_mascaraTel(input) {
+      let v = input.value.replace(/\D/g, '');
+      if (v.length > 11) v = v.slice(0, 11);
+      if (v.length > 7) input.value = '(' + v.slice(0, 2) + ') ' + v.slice(2, 7) + '-' + v.slice(7);
+      else if (v.length > 2) input.value = '(' + v.slice(0, 2) + ') ' + v.slice(2);
+      else if (v.length > 0) input.value = '(' + v;
+    }
+
+    document.getElementById('gestao-modal-form').addEventListener('click', function(e) { if (e.target === this) gestao_de_clientes_fecharFormulario(); });
+
+    gestao_de_clientes_render();
+  </script>
+</section>
+
     <!-- TELAS -->
     </main>
 
