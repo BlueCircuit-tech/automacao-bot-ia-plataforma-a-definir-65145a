@@ -607,6 +607,298 @@ window._catalogo_refresh=function(){catalogo_de_produtos_aplicarFiltros();};
 </script>
 </section>
 
+    <section data-tela="detalhe-do-produto" class="hidden">
+    <div class="max-w-[1320px] mx-auto px-6 py-8 space-y-6">
+        <div class="flex items-center gap-2 text-sm text-gray-500">
+            <button onclick="mostrarTela('catalogo-de-produtos')" class="hover:text-marca transition-colors">Catálogo</button>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/></svg>
+            <button onclick="mostrarTela('catalogo-de-produtos')" class="hover:text-marca transition-colors">Eletrônicos</button>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/></svg>
+            <button onclick="mostrarTela('catalogo-de-produtos')" class="hover:text-marca transition-colors">Fones de Ouvido</button>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/></svg>
+            <span class="text-gray-800 font-medium">Fone Bluetooth Pro X500</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div class="space-y-4">
+                <div class="relative bg-white rounded-xl border border-gray-200 overflow-hidden group" style="aspect-ratio:1/1;">
+                    <div id="main-image-container" class="w-full h-full relative cursor-zoom-in" onmousemove="detalhe_do_produto_zoom(event)" onmouseleave="detalhe_do_produto_zoomOut()">
+                        <div id="main-image" class="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-50">
+                            <svg class="w-40 h-40 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+                        </div>
+                    </div>
+                    <button onclick="detalhe_do_produto_prevImage()" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/90 rounded-full shadow-md flex items-center justify-center hover:bg-white transition-colors z-10">
+                        <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <button onclick="detalhe_do_produto_nextImage()" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/90 rounded-full shadow-md flex items-center justify-center hover:bg-white transition-colors z-10">
+                        <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <span id="image-counter" class="absolute bottom-3 right-3 bg-black/50 text-white text-xs px-2 py-0.5 rounded-full">1/6</span>
+                </div>
+
+                <div class="flex gap-2">
+                    <button onclick="detalhe_do_produto_prevImage()" class="w-9 h-9 bg-white rounded-lg border border-gray-200 flex items-center justify-center hover:border-marca transition-colors">
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <div id="thumbnails-container" class="flex gap-2 overflow-x-auto flex-1"></div>
+                    <button onclick="detalhe_do_produto_nextImage()" class="w-9 h-9 bg-white rounded-lg border border-gray-200 flex items-center justify-center hover:border-marca transition-colors">
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+
+                <div class="flex gap-3">
+                    <button onclick="detalhe_do_produto_baixarPDF()" class="flex items-center gap-2 px-4 py-2.5 bg-gray-100 rounded-lg text-sm text-gray-700 hover:bg-gray-200 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        Baixar Ficha Técnica (PDF)
+                    </button>
+                    <button onclick="detalhe_do_produto_verVideo()" class="flex items-center gap-2 px-4 py-2.5 bg-gray-100 rounded-lg text-sm text-gray-700 hover:bg-gray-200 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Ver Vídeo do Produto
+                    </button>
+                </div>
+            </div>
+
+            <div class="space-y-5">
+                <div class="flex items-start justify-between">
+                    <div class="flex-1">
+                        <span class="badge bg-green-100 text-green-700 text-xs font-semibold px-2.5 py-1 rounded-full mb-2 inline-flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                            Em estoque
+                        </span>
+                        <h1 class="font-display text-2xl font-bold text-marca-900 leading-tight">Fone Bluetooth Pro X500</h1>
+                        <p class="text-gray-500 text-sm mt-1">Referência: FBP-X500-PT</p>
+                    </div>
+                    <span class="badge bg-blue-50 text-blue-700 text-xs font-medium px-2.5 py-1 rounded-lg border border-blue-200">-15% OFF</span>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-1">
+                        <svg class="w-5 h-5 text-yellow-400 fill-yellow-400" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-yellow-400 fill-yellow-400" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-yellow-400 fill-yellow-400" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-yellow-400 fill-yellow-400" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-5 h-5 text-yellow-400 fill-yellow-400" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
+                    <span class="text-sm font-medium text-gray-700">4.8/5</span>
+                    <button onclick="detalhe_do_produto_scrollReviews()" class="text-sm text-marca hover:underline">127 avaliações</button>
+                </div>
+
+                <div class="bg-gray-50 rounded-xl p-5 space-y-2 border border-gray-100">
+                    <div class="flex items-baseline gap-3">
+                        <span class="text-xs text-gray-400 line-through">R$ 469,90</span>
+                        <span class="badge bg-red-50 text-red-600 text-xs font-bold px-2 py-0.5 rounded">-R$ 70,00</span>
+                    </div>
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-3xl font-bold text-marca-900">R$ 399,90</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-sm">
+                        <span class="badge bg-green-50 text-green-700 text-xs font-semibold px-2 py-0.5 rounded border border-green-200">PIX</span>
+                        <span class="text-green-600 font-semibold">R$ 339,90</span>
+                        <span class="text-gray-400 text-xs">à vista</span>
+                    </div>
+                    <p class="text-xs text-gray-500">ou 12x de <strong class="text-gray-700">R$ 39,99</strong> sem juros</p>
+                    <p class="text-xs text-gray-400">Total: R$ 479,88 no cartão (c/ juros)</p>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-gray-700">Cor</label>
+                    <div id="color-options" class="flex gap-3"></div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-gray-700">Quantidade</label>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                            <button onclick="detalhe_do_produto_changeQty(-1)" class="w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition-colors text-gray-600 text-lg font-medium">−</button>
+                            <span id="qty-display" class="w-12 h-10 flex items-center justify-center text-sm font-semibold text-gray-800 border-x border-gray-300">1</span>
+                            <button onclick="detalhe_do_produto_changeQty(1)" class="w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition-colors text-gray-600 text-lg font-medium">+</button>
+                        </div>
+                        <span class="text-xs text-gray-400">estoque: 48 unidades</span>
+                    </div>
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                    <button onclick="detalhe_do_produto_addToCart()" class="flex-1 btn bg-destaque text-white font-semibold py-3.5 px-6 rounded-lg hover:brightness-110 active:scale-[0.97] transition-all flex items-center justify-center gap-2 text-base">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
+                        Adicionar ao Carrinho
+                    </button>
+                    <button onclick="mostrarTela('carrinho-e-checkout')" class="btn bg-white border-2 border-marca text-marca font-semibold py-3.5 px-6 rounded-lg hover:bg-marca hover:text-white active:scale-[0.97] transition-all flex items-center justify-center gap-2 text-base">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        Solicitar Orçamento
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-6 pt-2 text-xs text-gray-500">
+                    <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Frete grátis acima de R$ 299</span>
+                    <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>Troca em 30 dias</span>
+                    <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>1 ano de garantia</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-gray-200 mt-8">
+            <div class="flex border-b border-gray-200 overflow-x-auto">
+                <button onclick="detalhe_do_produto_switchTab('descricao')" id="tab-btn-descricao" class="detalhe-tab-btn px-6 py-4 text-sm font-semibold text-marca border-b-2 border-marca whitespace-nowrap">Descrição</button>
+                <button onclick="detalhe_do_produto_switchTab('especificacoes')" id="tab-btn-especificacoes" class="detalhe-tab-btn px-6 py-4 text-sm font-semibold text-gray-500 border-b-2 border-transparent hover:text-gray-700 whitespace-nowrap">Especificações Técnicas</button>
+                <button onclick="detalhe_do_produto_switchTab('avaliacoes')" id="tab-btn-avaliacoes" class="detalhe-tab-btn px-6 py-4 text-sm font-semibold text-gray-500 border-b-2 border-transparent hover:text-gray-700 whitespace-nowrap">Avaliações (127)</button>
+            </div>
+            <div class="p-6">
+                <div id="tab-descricao" class="detalhe-tab-content">
+                    <div class="max-w-3xl space-y-4 text-gray-600 text-sm leading-relaxed">
+                        <p>O <strong class="text-gray-800">Fone Bluetooth Pro X500</strong> foi desenvolvido para profissionais que demandam excelência em áudio sem comprometer a mobilidade. Com tecnologia <strong class="text-gray-800">Bluetooth 5.3</strong> de última geração, oferece conexão estável em até 12 metros de distância e baixa latência de apenas 45ms, ideal para videoconferências e reprodução multimídia.</p>
+                        <p>Seu driver proprietário de <strong class="text-gray-800">40mm com neodímio</strong> reproduz frequências de 20Hz a 20kHz com fidelidade profissional. O sistema de cancelamento de ruído ativo híbrido (ANC) elimina até 95% dos ruídos ambiente, garantindo imersão total no seu trabalho ou lazer.</p>
+                        <p>A espuma memory foam das almofadas e a haste ajustável em aço inoxidável proporcionam conforto prolongado mesmo em sessões de até 8 horas contínuas de uso. A bateria de 800mAh entrega até 35 horas de reprodução com ANC ativado e 50 horas com ANC desligado.</p>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3">
+                            <div class="bg-marca-50 rounded-lg p-3 text-center"><p class="text-lg font-bold text-marca-900">35h</p><p class="text-xs text-gray-500">Bateria com ANC</p></div>
+                            <div class="bg-marca-50 rounded-lg p-3 text-center"><p class="text-lg font-bold text-marca-900">45ms</p><p class="text-xs text-gray-500">Baixa Latência</p></div>
+                            <div class="bg-marca-50 rounded-lg p-3 text-center"><p class="text-lg font-bold text-marca-900">95%</p><p class="text-xs text-gray-500">ANC Híbrido</p></div>
+                            <div class="bg-marca-50 rounded-lg p-3 text-center"><p class="text-lg font-bold text-marca-900">260g</p><p class="text-xs text-gray-500">Peso leve</p></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-especificacoes" class="detalhe-tab-content hidden">
+                    <table class="w-full text-sm">
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-gray-50"><td class="py-3 text-gray-500 w-48">Marca</td><td class="py-3 font-medium text-gray-800">SoundTech Pro</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="py-3 text-gray-500">Modelo</td><td class="py-3 font-medium text-gray-800">X500</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="py-3 text-gray-500">Referência</td><td class="py-3 font-medium text-gray-800">FBP-X500-PT</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="py-3 text-gray-500">Conectividade</td><td class="py-3 font-medium text-gray-800">Bluetooth 5.3 / USB-C / P2 3.5mm</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="py-3 text-gray-500">Driver</td><td class="py-3 font-medium text-gray-800">40mm Neodímio</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="py-3 text-gray-500">Resposta de Frequência</td><td class="py-3 font-medium text-gray-800">20Hz – 20kHz</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="py-3 text-gray-500">Impedância</td><td class="py-3 font-medium text-gray-800">32Ω</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="py-3 text-gray-500">Sensibilidade</td><td class="py-3 font-medium text-gray-800">105dB ± 3dB</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="py-3 text-gray-500">ANC</td><td class="py-3 font-medium text-gray-800">Cancelamento Ativo Híbrido, até 95%</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="py-3 text-gray-500">Bateria</td><td class="py-3 font-medium text-gray-800">800mAh Li-Po (35h ANC / 50h sem ANC)</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="py-3 text-gray-500">Tempo de Carga</td><td class="py-3 font-medium text-gray-800">~2h via USB-C</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="py-3 text-gray-500">Peso</td><td class="py-3 font-medium text-gray-800">260g</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="py-3 text-gray-500">Certificação</td><td class="py-3 font-medium text-gray-800">IPX4, Bluetooth SIG, Anatel</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="tab-avaliacoes" class="detalhe-tab-content hidden">
+                    <div class="flex items-center gap-8 mb-6 pb-6 border-b border-gray-100">
+                        <div class="text-center">
+                            <p class="text-4xl font-bold text-marca-900">4.8</p>
+                            <div class="flex items-center gap-0.5 my-1">★★★★★</div>
+                            <p class="text-xs text-gray-400">127 avaliações</p>
+                        </div>
+                        <div class="flex-1 space-y-1">
+                            <div class="flex items-center gap-2 text-xs"><span class="w-3">5</span><div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-yellow-400 rounded-full" style="width:78%"></div></div><span class="text-gray-500 w-10">78%</span></div>
+                            <div class="flex items-center gap-2 text-xs"><span class="w-3">4</span><div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-yellow-400 rounded-full" style="width:15%"></div></div><span class="text-gray-500 w-10">15%</span></div>
+                            <div class="flex items-center gap-2 text-xs"><span class="w-3">3</span><div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-yellow-400 rounded-full" style="width:5%"></div></div><span class="text-gray-500 w-10">5%</span></div>
+                            <div class="flex items-center gap-2 text-xs"><span class="w-3">2</span><div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-yellow-400 rounded-full" style="width:1%"></div></div><span class="text-gray-500 w-10">1%</span></div>
+                            <div class="flex items-center gap-2 text-xs"><span class="w-3">1</span><div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-yellow-400 rounded-full" style="width:1%"></div></div><span class="text-gray-500 w-10">1%</span></div>
+                        </div>
+                    </div>
+                    <div class="space-y-4" id="avaliacoes-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+(function(){
+    const productImages = [
+        {label:'Frente',grad:'from-gray-200 to-gray-300',iconColor:'text-gray-500'},
+        {label:'Lateral',grad:'from-gray-100 to-gray-200',iconColor:'text-gray-400'},
+        {label:'Lateral',grad:'from-gray-200 to-gray-250',iconColor:'text-gray-500'},
+        {label:'Topo',grad:'from-gray-150 to-gray-250',iconColor:'text-gray-500'},
+        {label:'Acessórios',grad:'from-gray-100 to-gray-200',iconColor:'text-gray-400'},
+        {label:'Embalagem',grad:'from-gray-200 to-gray-300',iconColor:'text-gray-500'}
+    ];
+    const productColors = [
+        {name:'Preto',value:'#1a1a1a',bg:'bg-gray-900',border:'border-gray-800'},
+        {name:'Azul Marinho',value:'#1E3A5F',bg:'bg-marca-900',border:'border-marca-800'},
+        {name:'Cinza',value:'#6b7280',bg:'bg-gray-500',border:'border-gray-400'},
+        {name:'Branco',value:'#f3f4f6',bg:'bg-gray-100',border:'border-gray-200'}
+    ];
+    const reviews = [
+        {name:'Ricardo Mendes',stars:5,date:'2025-03-15',text:'Som impecável. O cancelamento de ruído é muito eficiente — uso no escritório com bastante barulho e consigo me concentrar totalmente. A bateria dura mesmo o que a marca promete.',color:'bg-blue-900'},
+        {name:'Ana Beatriz Costa',stars:5,date:'2025-03-10',text:'Comprei para trabalho remoto e foi a melhor aquisição do ano. O conforto é surpreendente, uso horas a fio sem dor. Microfone com ótima captação para reuniões.',color:'bg-emerald-800'},
+        {name:'Paulo Henrique Silva',stars:4,date:'2025-02-28',text:'Excelente custo-benefício. A qualidade do áudio é superior à faixa de preço. Só achei a case um pouco frágil, mas o produto em si compensa. Recomendo.',color:'bg-amber-700'},
+        {name:'Fernanda Oliveira',stars:5,date:'2025-02-20',text:'Amei! A cor azul marinho é linda na vida real. O Bluetooth conecta instantaneamente com o celular e notebook simultaneamente. Muito prática.',color:'bg-rose-800'},
+        {name:'Carlos Eduardo Lima',stars:4,date:'2025-01-15',text:'Produto muito bem construído. A haste ajustável é firme e os acabamentos são premium. A única ressalva é que o app mobile poderia ter mais funcionalidades de equalização.',color:'bg-indigo-800'},
+        {name:'Juliana Pereira',stars:5,date:'2024-12-22',text:'Presente de Natal para minha filha que estuda música. Ela disse que é o que usava no estúdio da faculdade. Qualidade profissional a um preço justo.',color:'bg-teal-800'}
+    ];
+    let currentImage=0, currentColor=0, qty=1;
+
+    function buildThumbnails(){
+        const c=document.getElementById('thumbnails-container');c.innerHTML='';
+        productImages.forEach((img,i)=>{
+            const b=document.createElement('button');
+            b.className='w-14 h-14 rounded-lg border-2 flex-shrink-0 flex items-center justify-center transition-all bg-gradient-to-br '+img.grad+' '+((i===currentImage)?'border-marca ring-2 ring-marca/20':'border-gray-200 hover:border-gray-300');
+            b.innerHTML='<svg class="w-6 h-6 '+img.iconColor+'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>';
+            b.onclick=()=>detalhe_do_produto_setImage(i);c.appendChild(b);
+        });
+    }
+    function buildColors(){
+        const c=document.getElementById('color-options');c.innerHTML='';
+        productColors.forEach((col,i)=>{
+            const b=document.createElement('button');
+            b.className='w-9 h-9 rounded-full border-2 transition-all '+(i===currentColor?'ring-2 ring-offset-2 ring-marca scale-110':'border-gray-300 hover:border-gray-400');
+            b.style.backgroundColor=col.value;
+            b.title=col.name;b.onclick=()=>{currentColor=i;buildColors();toast('Cor selecionada: '+col.name,'info');};c.appendChild(b);
+        });
+    }
+    function buildReviews(){
+        const c=document.getElementById('avaliacoes-list');c.innerHTML='';
+        reviews.forEach(r=>{
+            const stars=Array.from({length:5},(_,i)=>i<r.stars?'<svg class="w-4 h-4 text-yellow-400 fill-yellow-400" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>':'<svg class="w-4 h-4 text-gray-300" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>').join('');
+            c.innerHTML+='<div class="flex gap-4 p-4 bg-gray-50 rounded-xl"><div class="w-10 h-10 '+r.color+' rounded-full flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">'+r.name.split(' ').map(n=>n[0]).join('').slice(0,2)+'</div><div class="flex-1 min-w-0"><div class="flex items-center justify-between mb-1"><p class="font-medium text-gray-800 text-sm">'+r.name+'</p><span class="text-xs text-gray-400">'+r.date+'</span></div><div class="flex gap-0.5 mb-2">'+stars+'</div><p class="text-sm text-gray-600 leading-relaxed">'+r.text+'</p></div></div>';
+        });
+    }
+    window.detalhe_do_produto_setImage=function(i){
+        currentImage=i;
+        document.getElementById('image-counter').textContent=(i+1)+'/'+productImages.length;
+        const mi=document.getElementById('main-image');
+        mi.className='w-full h-full flex items-center justify-center bg-gradient-to-br '+productImages[i].grad;
+        mi.innerHTML='<div class="text-center space-y-2"><svg class="w-32 h-32 mx-auto '+productImages[i].iconColor+'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg><p class="text-sm text-gray-500">'+productImages[i].label+'</p></div>';
+        buildThumbnails();
+    };
+    window.detalhe_do_produto_nextImage=function(){detalhe_do_produto_setImage((currentImage+1)%productImages.length);};
+    window.detalhe_do_produto_prevImage=function(){detalhe_do_produto_setImage((currentImage-1+productImages.length)%productImages.length);};
+    window.detalhe_do_produto_zoom=function(e){
+        const cont=document.getElementById('main-image-container');
+        const rect=cont.getBoundingClientRect();
+        const x=((e.clientX-rect.left)/rect.width)*100;
+        const y=((e.clientY-rect.top)/rect.height)*100;
+        cont.style.backgroundImage='radial-gradient(circle at '+x+'% '+y+'%, rgba(37,99,235,0.08) 0%, transparent 50%)';
+    };
+    window.detalhe_do_produto_zoomOut=function(){
+        const cont=document.getElementById('main-image-container');
+        cont.style.backgroundImage='none';
+    };
+    window.detalhe_do_produto_changeQty=function(delta){
+        qty=Math.max(1,Math.min(48,qty+delta));
+        document.getElementById('qty-display').textContent=qty;
+    };
+    window.detalhe_do_produto_addToCart=function(){
+        const color=productColors[currentColor].name;
+        toast(qty+'x Fone Bluetooth Pro X500 ('+color+') adicionado ao carrinho!','ok');
+        setTimeout(()=>mostrarTela('carrinho-e-checkout'),600);
+    };
+    window.detalhe_do_produto_baixarPDF=function(){
+        toast('Ficha técnica enviada para download','ok');
+    };
+    window.detalhe_do_produto_verVideo=function(){
+        toast('Reproduzindo vídeo do produto...','info');
+    };
+    window.detalhe_do_produto_switchTab=function(tab){
+        document.querySelectorAll('.detalhe-tab-content').forEach(el=>el.classList.add('hidden'));
+        document.getElementById('tab-'+tab).classList.remove('hidden');
+        document.querySelectorAll('.detalhe-tab-btn').forEach(b=>{b.classList.remove('text-marca','border-marca');b.classList.add('text-gray-500','border-transparent');});
+        const btn=document.getElementById('tab-btn-'+tab);
+        btn.classList.add('text-marca','border-marca');btn.classList.remove('text-gray-500','border-transparent');
+    };
+    window.detalhe_do_produto_scrollReviews=function(){
+        detalhe_do_produto_switchTab('avaliacoes');
+    };
+
+    buildThumbnails();buildColors();buildReviews();
+})();
+</script>
+
     <!-- TELAS -->
     </main>
 
